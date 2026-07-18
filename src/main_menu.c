@@ -1370,12 +1370,12 @@ static void Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome(u8 taskId)
             NewGameBirchSpeech_ClearWindow(0);
             StringExpandPlaceholders(gStringVar4, gText_Birch_Welcome);
             AddTextPrinterForMessage(TRUE);
-            gTasks[taskId].func = Task_NewGameBirchSpeech_ThisIsAPokemon;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_MainSpeech; // Hunter: skip the Lotad demo
         }
     }
 }
 
-static void Task_NewGameBirchSpeech_ThisIsAPokemon(u8 taskId)
+static void UNUSED Task_NewGameBirchSpeech_ThisIsAPokemon(u8 taskId)
 {
     if (!gPaletteFade.active && !RunTextPrintersAndIsPrinter0Active())
     {

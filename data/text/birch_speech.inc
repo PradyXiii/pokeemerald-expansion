@@ -1,9 +1,6 @@
 gText_Birch_Welcome::
-	.string "Hi! Sorry to keep you waiting!\p"
-	.string "Welcome to HOENN-ten years after\n"
-	.string "the sky split over SOOTOPOLIS.\p"
-	.string "My name is BIRCH. I head the\n"
-	.string "MIGRATION SURVEY.\p"
+	.string "You're the new licensee.\n"
+	.string "Good. I'll keep this short.\p"
 	.string "$"
 
 gText_Birch_Pokemon::
@@ -12,18 +9,13 @@ gText_Birch_Pokemon::
 	.string "$"
 
 gText_Birch_MainSpeech::
-	.string "Since the crisis, POKéMON from\n"
-	.string "every region have poured into\l"
-	.string "HOENN on broken currents.\p"
-	.string "Our ecosystem is changing by\n"
-	.string "the season.\p"
-	.string "So the LEAGUE revived an old\n"
-	.string "institution: licensed HUNTERS.\p"
-	.string "HUNTERS catch, catalog, and\n"
-	.string "relocate-we never harm.\p"
-	.string "Guild halls in every town rank\n"
-	.string "the best of them.\p"
-	.string "That's where you come in.\p"
+	.string "Ten years since the sky split,\n"
+	.string "foreign POKéMON flood our routes.\p"
+	.string "The LEAGUE's answer: HUNTERS.\n"
+	.string "Catch. Catalog. Relocate.\p"
+	.string "A guild hall in every town ranks\n"
+	.string "us. Climb the ladders. Pass the\l"
+	.string "wardens' exams. Reach the top.\p"
 	.string "$"
 
 gText_Birch_AndYouAre::
@@ -47,12 +39,7 @@ gText_Birch_YourePlayer::
 	.string "$"
 
 gText_Birch_AreYouReady::
-	.string "All right, are you ready?\p"
-	.string "Your license starts as paper.\n"
-	.string "Make it mean something.\p"
-	.string "The wilds are stranger than any\n"
-	.string "HOENN you've read about-dragons\l"
-	.string "in the tall grass, even.\p"
-	.string "Well, I'll be expecting you later.\n"
-	.string "Come see me in my POKéMON LAB.\p"
+	.string "Three dragons are waiting in\n"
+	.string "your room. Pick your partner.\p"
+	.string "Then get moving, hunter.\p"
 	.string "$"

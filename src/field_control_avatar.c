@@ -8,6 +8,7 @@
 #include "faraway_island.h"
 #include "follower_npc.h"
 #include "event_data.h"
+#include "item.h"
 #include "event_object_movement.h"
 #include "event_scripts.h"
 #include "fieldmap.h"
@@ -235,6 +236,11 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         return TRUE;
 
     if (input->pressedSelectButton && UseRegisteredKeyItemOnField() == TRUE)
+        return TRUE;
+    // Hunter: B taps the hover board on/off (same as using the registered board)
+    if (input->pressedBButton && CheckBagHasItem(ITEM_MACH_BIKE, 1)
+     && gSaveBlock1Ptr->registeredItem == ITEM_MACH_BIKE
+     && UseRegisteredKeyItemOnField() == TRUE)
         return TRUE;
 
     if (input->pressedRButton && TryStartDexNavSearch())

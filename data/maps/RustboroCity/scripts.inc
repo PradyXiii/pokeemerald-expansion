@@ -1246,9 +1246,9 @@ RustboroCity_Text_CitySign:
 	.string "nature and science.”$"
 
 RustboroCity_Text_TrainersSchoolSign:
-	.string "POKéMON TRAINER'S SCHOOL\p"
-	.string "“We'll teach you anything about\n"
-	.string "POKéMON!”$"
+	.string "HUNTER GUILD-RUSTBORO BRANCH\n"
+	.string "Ranked ladder inside. All\l"
+	.string "licensed hunters welcome.$"
 
 RustboroCity_Text_CuttersHouse:
 	.string "CUTTER'S HOUSE$"

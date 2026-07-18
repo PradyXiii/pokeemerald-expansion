@@ -1,5 +1,6 @@
 #include "global.h"
 #include "clock.h"
+#include "starter_choose.h"
 extern bool8 gChoseOtherGender;
 #include "new_game.h"
 #include "random.h"
@@ -138,8 +139,10 @@ static void WarpToTruck(void)
 {
     if (IS_FRLG)
         SetWarpDestination(MAP_GROUP(MAP_PALLET_TOWN_PLAYERS_HOUSE_2F), MAP_NUM(MAP_PALLET_TOWN_PLAYERS_HOUSE_2F), WARP_ID_NONE, 6, 6);
+    else if (gSaveBlock2Ptr->playerGender == FEMALE)
+        SetWarpDestination(MAP_GROUP(MAP_LITTLEROOT_TOWN_MAYS_HOUSE_2F), MAP_NUM(MAP_LITTLEROOT_TOWN_MAYS_HOUSE_2F), WARP_ID_NONE, 5, 5);
     else
-        SetWarpDestination(MAP_GROUP(MAP_INSIDE_OF_TRUCK), MAP_NUM(MAP_INSIDE_OF_TRUCK), WARP_ID_NONE, -1, -1);
+        SetWarpDestination(MAP_GROUP(MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F), MAP_NUM(MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F), WARP_ID_NONE, 5, 5);
     WarpIntoMap();
 }
 
@@ -189,7 +192,7 @@ void NewGameInitData(void)
     ResetGabbyAndTy();
     ClearSecretBases();
     ClearBerryTrees();
-    SetMoney(&gSaveBlock1Ptr->money, 3000);
+    SetMoney(&gSaveBlock1Ptr->money, 50000); // Hunter: mother's stipend
     SetCoins(0);
     ResetLinkContestBoolean();
     ResetGameStats();
@@ -204,10 +207,17 @@ void NewGameInitData(void)
     gSaveBlock1Ptr->registeredItem = ITEM_NONE;
     ClearBag();
     NewGameInitPCItems();
-    // Hunter: starting kit — toggleable Exp. Share and Mom's hover board
+    // Hunter: starting kit — toggleable Exp. Share, Mom's hover board, field supplies
     if (gChoseOtherGender)
         FlagSet(FLAG_UNUSED_0x266);
     VarSet(VAR_UNUSED_0x4091, gSaveBlock2Ptr->playerTrainerId[0] % 6); // issued uniform color
+    AddBagItem(ITEM_POKE_BALL, 10);
+    GetStarterPokemon(0); // roll the three bedroom dragons now
+    // Hunter: skip the truck arrival entirely — family settled in already
+    VarSet(VAR_LITTLEROOT_INTRO_STATE, 7);
+    VarSet(VAR_LITTLEROOT_TOWN_STATE, 4);
+    VarSet(VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 2);
+    VarSet(VAR_LITTLEROOT_HOUSES_STATE_MAY, 2);
 
     AddBagItem(ITEM_EXP_SHARE, 1);
     AddBagItem(ITEM_MACH_BIKE, 1);

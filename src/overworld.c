@@ -1097,10 +1097,7 @@ static u16 GetCenterScreenMetatileBehavior(void)
 
 bool32 Overworld_IsBikingAllowed(void)
 {
-    if (!gMapHeader.allowCycling)
-        return FALSE;
-    else
-        return TRUE;
+    return TRUE; // Hunter: the hover board glides anywhere on land, indoors included
 }
 
 // Flash level of 0 is fully bright
@@ -1675,12 +1672,13 @@ void CB1_Overworld(void)
 
 #define TINT_NIGHT Q_8_8(0.456) | Q_8_8(0.456) << 8 | Q_8_8(0.615) << 16
 
+// Hunter: the whole day wears sun-kissed sepia; night goes deep amber
 const struct BlendSettings gTimeOfDayBlend[] =
 {
-    [TIME_MORNING] = {.coeff = 4,  .blendColor = 0xA8B0E0,   .isTint = TRUE},
-    [TIME_DAY]     = {.coeff = 0,  .blendColor = 0,          .isTint = FALSE},
-    [TIME_EVENING] = {.coeff = 4,  .blendColor = 0xA8B0E0,   .isTint = TRUE},
-    [TIME_NIGHT]   = {.coeff = 10, .blendColor = TINT_NIGHT, .isTint = TRUE},
+    [TIME_MORNING] = {.coeff = 6,  .blendColor = 0xE8B070, .isTint = TRUE},
+    [TIME_DAY]     = {.coeff = 6,  .blendColor = 0xE8B070, .isTint = TRUE},
+    [TIME_EVENING] = {.coeff = 8,  .blendColor = 0xE0A060, .isTint = TRUE},
+    [TIME_NIGHT]   = {.coeff = 8,  .blendColor = 0x906040, .isTint = TRUE},
 };
 
 #define DEFAULT_WEIGHT 256

@@ -1122,6 +1122,21 @@ static const struct MenuAction sMultichoiceList_HOF_Eggs_Victories_Quit[] = {
     {gText_ShopQuit}
 };
 
+static const u8 sText_HunterCrimson[] = _("CRIMSON");
+static const u8 sText_HunterAzure[]   = _("AZURE");
+static const u8 sText_HunterVerdant[] = _("VERDANT");
+static const u8 sText_HunterViolet[]  = _("VIOLET");
+static const u8 sText_HunterOnyx[]    = _("ONYX");
+static const u8 sText_HunterGold[]    = _("GOLD");
+static const struct MenuAction sMultichoiceList_HunterColors[] = {
+    {sText_HunterCrimson},
+    {sText_HunterAzure},
+    {sText_HunterVerdant},
+    {sText_HunterViolet},
+    {sText_HunterOnyx},
+    {sText_HunterGold}
+};
+
 static const struct MenuAction MultichoiceList_Exit[] =
 {
     {gText_Exit},
@@ -1294,6 +1309,7 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_HOF_VICTORIES_QUIT]                         = MULTICHOICE(sMultichoiceList_HOF_Victories_Quit),
     [MULTI_EGGS_VICTORIES_QUIT]                        = MULTICHOICE(sMultichoiceList_Eggs_Victories_Quit),
     [MULTI_HOF_EGGS_VICTORIES_QUIT]                    = MULTICHOICE(sMultichoiceList_HOF_Eggs_Victories_Quit),
+    [MULTI_HUNTER_COLORS]                              = MULTICHOICE(sMultichoiceList_HunterColors),
 };
 
 const u8 *const gStdStrings[] =
