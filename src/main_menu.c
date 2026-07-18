@@ -407,7 +407,7 @@ static const struct WindowTemplate sNewGameBirchSpeechTextWindows[] =
         .tilemapLeft = 3,
         .tilemapTop = 5,
         .width = 6,
-        .height = 4,
+        .height = 6,
         .paletteNum = 15,
         .baseBlock = 0x6D
     },
@@ -418,7 +418,7 @@ static const struct WindowTemplate sNewGameBirchSpeechTextWindows[] =
         .width = 9,
         .height = 10,
         .paletteNum = 15,
-        .baseBlock = 0x85
+        .baseBlock = 0x91
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -474,7 +474,8 @@ static const union AffineAnimCmd *const sSpriteAffineAnimTable_PlayerShrink[] =
 
 static const struct MenuAction sMenuActions_Gender[] = {
     {gText_Boy, {NULL}},
-    {gText_Girl, {NULL}}
+    {gText_Girl, {NULL}},
+    {gText_OtherGender, {NULL}}
 };
 
 static const u8 *const sMalePresetNames[] = {
@@ -1530,22 +1531,33 @@ static void Task_NewGameBirchSpeech_WaitToShowGenderMenu(u8 taskId)
     }
 }
 
+bool8 gChoseOtherGender;
+
 static void Task_NewGameBirchSpeech_ChooseGender(u8 taskId)
 {
-    enum Gender gender = NewGameBirchSpeech_ProcessGenderMenuInput();
+    s8 gender = NewGameBirchSpeech_ProcessGenderMenuInput();
     enum Gender gender2;
 
     switch (gender)
     {
     case MALE:
         PlaySE(SE_SELECT);
+        gChoseOtherGender = FALSE;
         gSaveBlock2Ptr->playerGender = gender;
         NewGameBirchSpeech_ClearGenderWindow(1, 1);
         gTasks[taskId].func = Task_NewGameBirchSpeech_WhatsYourName;
         break;
     case FEMALE:
         PlaySE(SE_SELECT);
+        gChoseOtherGender = FALSE;
         gSaveBlock2Ptr->playerGender = gender;
+        NewGameBirchSpeech_ClearGenderWindow(1, 1);
+        gTasks[taskId].func = Task_NewGameBirchSpeech_WhatsYourName;
+        break;
+    case FEMALE + 1: // OTHER: female sprite base for now, marked for hunter dialogue
+        PlaySE(SE_SELECT);
+        gChoseOtherGender = TRUE;
+        gSaveBlock2Ptr->playerGender = FEMALE;
         NewGameBirchSpeech_ClearGenderWindow(1, 1);
         gTasks[taskId].func = Task_NewGameBirchSpeech_WhatsYourName;
         break;

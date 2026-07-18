@@ -1,5 +1,6 @@
 #include "global.h"
 #include "clock.h"
+extern bool8 gChoseOtherGender;
 #include "new_game.h"
 #include "random.h"
 #include "pokemon.h"
@@ -204,6 +205,10 @@ void NewGameInitData(void)
     ClearBag();
     NewGameInitPCItems();
     // Hunter: starting kit — toggleable Exp. Share and Mom's hover board
+    if (gChoseOtherGender)
+        FlagSet(FLAG_UNUSED_0x266);
+    VarSet(VAR_UNUSED_0x4091, gSaveBlock2Ptr->playerTrainerId[0] % 6); // issued uniform color
+
     AddBagItem(ITEM_EXP_SHARE, 1);
     AddBagItem(ITEM_MACH_BIKE, 1);
     gSaveBlock1Ptr->registeredItem = ITEM_MACH_BIKE;

@@ -1758,6 +1758,14 @@ void UpdateTimeOfDay(bool32 updateBlend)
         }
         gTimeOfDay = TIME_DAY;
     }
+
+    // Hunter: sun-kissed sepia is the region's look unless the player turns it off
+    if (updateBlend && !FlagGet(FLAG_UNUSED_0x265))
+    {
+        static const struct BlendSettings sHunterSepia = {.coeff = 6, .blendColor = 0xE8B070, .isTint = TRUE};
+        gTimeBlend.weight = gTimeBlend.altWeight = DEFAULT_WEIGHT;
+        gTimeBlend.startBlend = gTimeBlend.endBlend = sHunterSepia;
+    }
 }
 
 #undef MORNING_HOUR_MIDDLE

@@ -3357,6 +3357,28 @@ static void UNUSED LoadObjectEventPaletteSet(u16 *paletteTags)
 }
 
 // Really just loads the palette and applies weather fade
+// Hunter: 6 issued uniform colors; accent palette entries 12/13 are recolored per preset
+static void ApplyHunterUniformTint(u16 tag, u8 paletteNum)
+{
+    static const u16 sUniformAccents[][2] = {
+        {RGB(31, 12, 11), RGB(24,  8,  8)}, // crimson
+        {RGB(11, 17, 31), RGB( 5, 10, 24)}, // azure
+        {RGB(11, 25, 14), RGB( 4, 16,  8)}, // verdant
+        {RGB(22, 14, 31), RGB(14,  6, 22)}, // violet
+        {RGB(11, 11, 12), RGB( 5,  5,  6)}, // onyx
+        {RGB(31, 25, 10), RGB(25, 17,  4)}, // gold
+    };
+    u32 preset;
+
+    if (tag != OBJ_EVENT_PAL_TAG_BRENDAN && tag != OBJ_EVENT_PAL_TAG_MAY
+     && tag != OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION && tag != OBJ_EVENT_PAL_TAG_MAY_REFLECTION)
+        return;
+
+    preset = VarGet(VAR_UNUSED_0x4091) % ARRAY_COUNT(sUniformAccents);
+    LoadPalette(&sUniformAccents[preset][0], OBJ_PLTT_ID(paletteNum) + 12, sizeof(u16));
+    LoadPalette(&sUniformAccents[preset][1], OBJ_PLTT_ID(paletteNum) + 13, sizeof(u16));
+}
+
 static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette)
 {
     u8 paletteNum = IndexOfSpritePaletteTag(spritePalette->tag);
@@ -3364,7 +3386,10 @@ static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette
         return paletteNum;
     paletteNum = LoadSpritePalette(spritePalette);
     if (paletteNum != 0xFF)
+    {
+        ApplyHunterUniformTint(spritePalette->tag, paletteNum);
         UpdateSpritePaletteWithWeather(paletteNum, FALSE);
+    }
     return paletteNum;
 }
 

@@ -1,9 +1,9 @@
 gText_Birch_Welcome::
 	.string "Hi! Sorry to keep you waiting!\p"
-	.string "Welcome to the world of POKéMON!\p"
-	.string "My name is BIRCH.\p"
-	.string "But everyone calls me the POKéMON\n"
-	.string "PROFESSOR.\p"
+	.string "Welcome to HOENN-ten years after\n"
+	.string "the sky split over SOOTOPOLIS.\p"
+	.string "My name is BIRCH. I head the\n"
+	.string "MIGRATION SURVEY.\p"
 	.string "$"
 
 gText_Birch_Pokemon::
@@ -12,28 +12,25 @@ gText_Birch_Pokemon::
 	.string "$"
 
 gText_Birch_MainSpeech::
-	.string "This world is widely inhabited by\n"
-	.string "creatures known as POKéMON.\p"
-	.string "We humans live alongside POKéMON,\n"
-	.string "at times as friendly playmates, and\l"
-	.string "at times as cooperative workmates.\p"
-	.string "And sometimes, we band together\n"
-	.string "and battle others like us.\p"
-	.string "But despite our closeness, we don't\n"
-	.string "know everything about POKéMON.\p"
-	.string "In fact, there are many, many\n"
-	.string "secrets surrounding POKéMON.\p"
-	.string "To unravel POKéMON mysteries,\n"
-	.string "I've been undertaking research.\l"
-	.string "That's what I do.\p"
+	.string "Since the crisis, POKéMON from\n"
+	.string "every region have poured into\l"
+	.string "HOENN on broken currents.\p"
+	.string "Our ecosystem is changing by\n"
+	.string "the season.\p"
+	.string "So the LEAGUE revived an old\n"
+	.string "institution: licensed HUNTERS.\p"
+	.string "HUNTERS catch, catalog, and\n"
+	.string "relocate-we never harm.\p"
+	.string "Guild halls in every town rank\n"
+	.string "the best of them.\p"
+	.string "That's where you come in.\p"
 	.string "$"
 
 gText_Birch_AndYouAre::
-	.string "And you are?$"
+	.string "And you are-the new licensee?$"
 
 gText_Birch_BoyOrGirl::
-	.string "Are you a boy?\n"
-	.string "Or are you a girl?$"
+	.string "Tell me about yourself.$"
 
 gText_Birch_WhatsYourName::
 	.string "All right.\n"
@@ -44,18 +41,18 @@ gText_Birch_SoItsPlayer::
 
 gText_Birch_YourePlayer::
 	.string "Ah, okay!\p"
-	.string "You're {PLAYER}{KUN} who's moving to my\n"
-	.string "hometown of LITTLEROOT.\l"
+	.string "You're {PLAYER}{KUN}, the provisional\n"
+	.string "HUNTER posted to LITTLEROOT.\l"
 	.string "I get it now!\p"
 	.string "$"
 
 gText_Birch_AreYouReady::
 	.string "All right, are you ready?\p"
-	.string "Your very own adventure is about\n"
-	.string "to unfold.\p"
-	.string "Take courage, and leap into the\n"
-	.string "world of POKéMON where dreams,\l"
-	.string "adventure, and friendships await!\p"
+	.string "Your license starts as paper.\n"
+	.string "Make it mean something.\p"
+	.string "The wilds are stranger than any\n"
+	.string "HOENN you've read about-dragons\l"
+	.string "in the tall grass, even.\p"
 	.string "Well, I'll be expecting you later.\n"
 	.string "Come see me in my POKéMON LAB.\p"
 	.string "$"
