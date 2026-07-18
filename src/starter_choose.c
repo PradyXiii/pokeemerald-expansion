@@ -18,6 +18,7 @@
 #include "task.h"
 #include "text.h"
 #include "text_window.h"
+#include "random.h"
 #include "trainer_pokemon_sprites.h"
 #include "trig.h"
 #include "window.h"
@@ -114,12 +115,43 @@ static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
 #define FIRE_STARTER  (IS_FRLG ? SPECIES_CHARMANDER : SPECIES_TORCHIC)
 #define WATER_STARTER (IS_FRLG ? SPECIES_SQUIRTLE   : SPECIES_MUDKIP )
 
-static const u16 sStarterMon[STARTER_MON_COUNT] =
+// Hunter: Birch's field kit holds three dragons rolled fresh for each save.
+static const u16 sHunterDragonPool[] =
 {
-    GRASS_STARTER,
-    FIRE_STARTER,
-    WATER_STARTER,
+    SPECIES_DRATINI,   SPECIES_BAGON,      SPECIES_GIBLE,     SPECIES_AXEW,
+    SPECIES_DEINO,     SPECIES_GOOMY,      SPECIES_JANGMO_O,  SPECIES_DREEPY,
+    SPECIES_NOIBAT,    SPECIES_TYRUNT,     SPECIES_APPLIN,    SPECIES_TURTONATOR,
+    SPECIES_DRAMPA,    SPECIES_DURALUDON,  SPECIES_FRIGIBAX,  SPECIES_SWABLU,
 };
+
+static const u16 sHunterStarterVars[STARTER_MON_COUNT] =
+{
+    VAR_UNUSED_0x404E,
+    VAR_UNUSED_0x4083,
+    VAR_UNUSED_0x408B,
+};
+
+static void RollHunterStarters(void)
+{
+    u32 i, j;
+    u16 chosen[STARTER_MON_COUNT];
+    bool32 duplicate;
+
+    for (i = 0; i < STARTER_MON_COUNT;)
+    {
+        chosen[i] = sHunterDragonPool[Random() % ARRAY_COUNT(sHunterDragonPool)];
+        duplicate = FALSE;
+        for (j = 0; j < i; j++)
+        {
+            if (chosen[j] == chosen[i])
+                duplicate = TRUE;
+        }
+        if (!duplicate)
+            i++;
+    }
+    for (i = 0; i < STARTER_MON_COUNT; i++)
+        VarSet(sHunterStarterVars[i], chosen[i]);
+}
 
 static const struct BgTemplate sBgTemplates[3] =
 {
@@ -351,7 +383,9 @@ u16 GetStarterPokemon(u16 chosenStarterId)
 {
     if (chosenStarterId > STARTER_MON_COUNT)
         chosenStarterId = 0;
-    return sStarterMon[chosenStarterId];
+    if (VarGet(sHunterStarterVars[0]) == SPECIES_NONE)
+        RollHunterStarters();
+    return VarGet(sHunterStarterVars[chosenStarterId]);
 }
 
 static void VblankCB_StarterChoose(void)
