@@ -229,6 +229,9 @@ void NewGameInitData(void)
     FlagSet(FLAG_HIDE_ROUTE_101_ZIGZAGOON);
     // No vanilla rival anywhere; Kira (guild) replaces that role
     FlagSet(FLAG_HIDE_ROUTE_103_RIVAL);
+    FlagSet(FLAG_HIDE_ROUTE_110_RIVAL);
+    FlagSet(FLAG_HIDE_ROUTE_110_RIVAL_ON_BIKE);
+    VarSet(VAR_ROUTE110_STATE, 1);
     FlagSet(FLAG_HIDE_OLDALE_TOWN_RIVAL);
     FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_RIVAL);
     FlagSet(FLAG_HIDE_PLAYERS_HOUSE_DAD);

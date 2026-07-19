@@ -1,15 +1,16 @@
-@ Interact with cuttable tree
+@ Hunter: the hover board's edge field cuts - no HM, no party check
 EventScript_CutTree::
 	lockall
-	checkfieldmove FIELD_MOVE_CUT, TRUE
-	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_CheckTreeCantCut
-	setfieldeffectargument 0, VAR_RESULT
-	bufferpartymonnick STR_VAR_1, VAR_RESULT
-	buffermovename STR_VAR_2, MOVE_CUT
-	msgbox Text_WantToCut, MSGBOX_YESNO
+	goto_if_set FLAG_UNUSED_0x271, EventScript_HunterCutAsk
+	setflag FLAG_UNUSED_0x271
+	msgbox HunterBoard_Text_CutFirstTime, MSGBOX_DEFAULT
+EventScript_HunterCutAsk::
+	msgbox HunterBoard_Text_WantToCut, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_CancelCut
-	msgbox Text_MonUsedFieldMove, MSGBOX_DEFAULT
+	msgbox HunterBoard_Text_BoardCuts, MSGBOX_DEFAULT
 	closemessage
+	setvar VAR_0x8004, FALSE
+	setfieldeffectargument 0, 0
 EventScript_CutTreeCommon:
 	isfollowerfieldmoveuser VAR_0x8004
 	setfieldeffectargument 3, VAR_0x8004 @ skip pose if so
@@ -60,18 +61,19 @@ EventScript_UseRockSmash::
 	lockall
 	goto EventScript_RockSmashCommon
 
-@ Interact with smashable rock
+@ Hunter: the hover board's shock pulse smashes rocks - no HM
 EventScript_RockSmash::
 	lockall
-	checkfieldmove FIELD_MOVE_ROCK_SMASH, TRUE
-	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_CantSmashRock
-	setfieldeffectargument 0, VAR_RESULT
-	bufferpartymonnick STR_VAR_1, VAR_RESULT
-	buffermovename STR_VAR_2, MOVE_ROCK_SMASH
-	msgbox Text_WantToSmash, MSGBOX_YESNO
+	goto_if_set FLAG_UNUSED_0x272, EventScript_HunterSmashAsk
+	setflag FLAG_UNUSED_0x272
+	msgbox HunterBoard_Text_SmashFirstTime, MSGBOX_DEFAULT
+EventScript_HunterSmashAsk::
+	msgbox HunterBoard_Text_WantToSmash, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_CancelSmash
-	msgbox Text_MonUsedFieldMove, MSGBOX_DEFAULT
+	msgbox HunterBoard_Text_BoardSmashes, MSGBOX_DEFAULT
 	closemessage
+	setvar VAR_0x8004, FALSE
+	setfieldeffectargument 0, 0
 EventScript_RockSmashCommon:
 	@ check if follower should use the field move
 	isfollowerfieldmoveuser VAR_0x8004
@@ -474,3 +476,29 @@ Text_MonUsedRockClimb:
 Text_CantRockClimb:
 	.string "The cliff is steep.\n"
 	.string "A Pokémon may be able to climb it.$"
+
+HunterBoard_Text_CutFirstTime:
+	.string "The HOVER BOARD's edge field\n"
+	.string "resonates against the thin trunk.\p"
+	.string "It can CUT this tree down.$"
+
+HunterBoard_Text_WantToCut:
+	.string "CUT the tree with the\n"
+	.string "HOVER BOARD?$"
+
+HunterBoard_Text_BoardCuts:
+	.string "{PLAYER} swung the HOVER BOARD's\n"
+	.string "edge field!$"
+
+HunterBoard_Text_SmashFirstTime:
+	.string "The HOVER BOARD's field crackles\n"
+	.string "against the cracked rock.\p"
+	.string "A shock pulse would SMASH it.$"
+
+HunterBoard_Text_WantToSmash:
+	.string "SMASH the rock with the\n"
+	.string "HOVER BOARD?$"
+
+HunterBoard_Text_BoardSmashes:
+	.string "{PLAYER} fired the HOVER BOARD's\n"
+	.string "shock pulse!$"

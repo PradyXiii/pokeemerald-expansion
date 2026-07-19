@@ -686,6 +686,8 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_PICNICKER_FRLG]           = &gObjectEventGraphicsInfo_PicnickerFrlg,
     [OBJ_EVENT_GFX_COOLTRAINER_M]            = &gObjectEventGraphicsInfo_CooltrainerM,
     [OBJ_EVENT_GFX_COOLTRAINER_F]            = &gObjectEventGraphicsInfo_CooltrainerF,
+    [OBJ_EVENT_GFX_GIANT_GIBLE]              = &gObjectEventGraphicsInfo_GiantGible,
+    [OBJ_EVENT_GFX_GIANT_DRATINI]            = &gObjectEventGraphicsInfo_GiantDratini,
     [OBJ_EVENT_GFX_SWIMMER_M_WATER]          = &gObjectEventGraphicsInfo_SwimmerMWater,
     [OBJ_EVENT_GFX_SWIMMER_F_WATER]          = &gObjectEventGraphicsInfo_SwimmerFWater,
     [OBJ_EVENT_GFX_SWIMMER_M_LAND]           = &gObjectEventGraphicsInfo_SwimmerMLand,

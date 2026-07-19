@@ -17103,3 +17103,41 @@ Level: 6
 IVs: 20 HP / 20 Atk / 20 Def / 20 SpA / 20 SpD / 20 Spe
 - Astonish
 - Sand Attack
+
+=== TRAINER_GUILD_DFALL_SCOUT ===
+Name: TOMAS
+Class: Youngster
+Pic: Youngster
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move / Try To Faint
+
+Lillipup
+Level: 3
+- Tackle
+- Leer
+
+Zigzagoon
+Level: 3
+- Tackle
+- Growl
+
+=== TRAINER_GUILD_DFALL_BLADE ===
+Name: REY
+Class: Black Belt
+Pic: Black Belt
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move / Try To Faint
+
+Wingull
+Level: 4
+- Water Gun
+- Growl
+
+Machop
+Level: 5
+- Low Kick
+- Leer

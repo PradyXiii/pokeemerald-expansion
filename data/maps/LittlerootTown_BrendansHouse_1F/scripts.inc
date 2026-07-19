@@ -59,10 +59,64 @@ HunterGuildOffice_EventScript_KiraIsGone::
 	setflag FLAG_UNUSED_0x26B
 	return
 
+@ Dragonfall ladder state (VAR_UNUSED_0x40A1):
+@ 0 = fresh, 1 = scout beaten, 2 = blade beaten (clear), 3 = rewarded
 HunterGuildOffice_EventScript_Officer::
 	lock
 	faceplayer
+	goto_if_eq VAR_UNUSED_0x40A1, 2, HunterGuildOffice_EventScript_OfficerReward
+	goto_if_eq VAR_UNUSED_0x40A1, 3, HunterGuildOffice_EventScript_OfficerDone
 	msgbox HunterGuildOffice_Text_Officer, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_OfficerReward::
+	msgbox HunterGuildOffice_Text_OfficerReward, MSGBOX_DEFAULT
+	giveitem ITEM_GREAT_BALL, 5
+	setvar VAR_UNUSED_0x40A1, 3
+	release
+	end
+
+HunterGuildOffice_EventScript_OfficerDone::
+	msgbox HunterGuildOffice_Text_OfficerDone, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_Scout::
+	lock
+	faceplayer
+	goto_if_eq VAR_UNUSED_0x40A1, 0, HunterGuildOffice_EventScript_ScoutBattle
+	msgbox HunterGuildOffice_Text_ScoutBeaten, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_ScoutBattle::
+	msgbox HunterGuildOffice_Text_ScoutIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_GUILD_DFALL_SCOUT, HunterGuildOffice_Text_ScoutDefeat
+	setvar VAR_UNUSED_0x40A1, 1
+	msgbox HunterGuildOffice_Text_ScoutAfter, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_Blade::
+	lock
+	faceplayer
+	goto_if_eq VAR_UNUSED_0x40A1, 0, HunterGuildOffice_EventScript_BladeWait
+	goto_if_eq VAR_UNUSED_0x40A1, 1, HunterGuildOffice_EventScript_BladeBattle
+	msgbox HunterGuildOffice_Text_BladeBeaten, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_BladeWait::
+	msgbox HunterGuildOffice_Text_BladeWait, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_BladeBattle::
+	msgbox HunterGuildOffice_Text_BladeIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_GUILD_DFALL_BLADE, HunterGuildOffice_Text_BladeDefeat
+	setvar VAR_UNUSED_0x40A1, 2
+	msgbox HunterGuildOffice_Text_BladeAfter, MSGBOX_DEFAULT
 	release
 	end
 
@@ -88,10 +142,56 @@ HunterGuildOffice_EventScript_NoticeBoard::
 HunterGuildOffice_Text_Officer:
 	.string "Guild desk. License checks,\n"
 	.string "bounty intake, intel.\p"
-	.string "Your license is active, hunter.\n"
-	.string "This branch is too small to rank you.\p"
-	.string "The main hall in GUILDSTONE CITY\n"
-	.string "runs the ladder. Start there.$"
+	.string "Your license is active, hunter.\p"
+	.string "Two fighters hold this floor.\n"
+	.string "Beat both and I log your first\l"
+	.string "guild rank. Start any time.$"
+
+HunterGuildOffice_Text_OfficerReward:
+	.string "Floor clear. Logged.\p"
+	.string "By charter you hold Rank III,\n"
+	.string "provisional. Your issue:$"
+
+HunterGuildOffice_Text_OfficerDone:
+	.string "Rank III, provisional.\p"
+	.string "The main hall ladder in\n"
+	.string "GUILDSTONE CITY is your next rung.\p"
+	.string "KIRA hunts ROUTE 103 if you\n"
+	.string "want a real fight first.$"
+
+HunterGuildOffice_Text_ScoutIntro:
+	.string "Floor scout. Rank V.\n"
+	.string "Nobody skips the bottom rung.$"
+
+HunterGuildOffice_Text_ScoutDefeat:
+	.string "Logged and beaten…$"
+
+HunterGuildOffice_Text_ScoutAfter:
+	.string "REY is Rank IV. He hits harder\n"
+	.string "than he talks.$"
+
+HunterGuildOffice_Text_ScoutBeaten:
+	.string "You cleared me already.\n"
+	.string "Go up the ladder.$"
+
+HunterGuildOffice_Text_BladeWait:
+	.string "Ladder rules. The scout\n"
+	.string "screens you first.$"
+
+HunterGuildOffice_Text_BladeIntro:
+	.string "Rank IV. Last one between\n"
+	.string "you and a rank.$"
+
+HunterGuildOffice_Text_BladeDefeat:
+	.string "Clean. Rank-worthy.$"
+
+HunterGuildOffice_Text_BladeAfter:
+	.string "Report to the desk.\n"
+	.string "The Guild owes you a rank.$"
+
+HunterGuildOffice_Text_BladeBeaten:
+	.string "Take the GUILDSTONE ladder.\n"
+	.string "I want a rematch someday.$"
 
 HunterGuildOffice_Text_KiraIntro:
 	.string "KIRA: New face. You're the\n"
@@ -110,8 +210,10 @@ HunterGuildOffice_Text_KiraLeft:
 
 HunterGuildOffice_Text_NoticeBoard:
 	.string "GUILD NOTICE BOARD\p"
-	.string "RANKED LADDER: open at the main\n"
-	.string "hall, GUILDSTONE CITY.\p"
+	.string "BRANCH LADDER: two fighters,\n"
+	.string "open now. Rank III on clear.\p"
+	.string "MAIN HALL: GUILDSTONE CITY.\n"
+	.string "Ranked ladder, real pay.\p"
 	.string "MIGRANT ACTIVITY: HIGH on all\n"
 	.string "routes. Hunt with a partner.$"
 

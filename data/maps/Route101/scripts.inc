@@ -297,3 +297,37 @@ Route101_Text_RouteSign:
 	.string "MIGRANT ACTIVITY: HIGH\l"
 	.string "{UP_ARROW} WAYPOINT OLD DALE$"
 
+
+@ Hunter: a giant migrant dragon dens here - once-only catch opportunity.
+Route101_EventScript_GiantGible::
+	lock
+	faceplayer
+	goto_if_set FLAG_UNUSED_0x273, Route101_EventScript_GiantGibleEnd
+	msgbox Route101_Text_GiantGible, MSGBOX_DEFAULT
+	closemessage
+	waitse
+	playmoncry SPECIES_GIBLE, CRY_MODE_ENCOUNTER
+	delay 40
+	waitmoncry
+	setwildbattle SPECIES_GIBLE, 9
+	dowildbattle
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, Route101_EventScript_GiantGibleGone
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, Route101_EventScript_GiantGibleGone
+	release
+	end
+
+Route101_EventScript_GiantGibleGone::
+	setflag FLAG_UNUSED_0x273
+	removeobject LOCALID_SPILL_GIANT_GIBLE
+	release
+	end
+
+Route101_EventScript_GiantGibleEnd::
+	release
+	end
+
+Route101_Text_GiantGible:
+	.string "A colossal GIBLE has dug its den\n"
+	.string "into the valley floor.\p"
+	.string "The ground trembles.$"

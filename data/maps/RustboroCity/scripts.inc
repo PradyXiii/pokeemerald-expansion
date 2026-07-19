@@ -7,6 +7,7 @@ RustboroCity_OnTransition:
 	setflag FLAG_VISITED_RUSTBORO_CITY
 	call Common_EventScript_SetupRivalGfxId
 	call_if_eq VAR_RUSTBORO_CITY_STATE, 6, RustboroCity_EventScript_HideMapNamePopup
+	call_if_eq VAR_RUSTBORO_CITY_STATE, 7, HunterRustboro_EventScript_SkipRivalScene
 	getplayerxy VAR_TEMP_0, VAR_TEMP_1
 	goto_if_eq VAR_RUSTBORO_CITY_STATE, 6, RustboroCity_EventScript_PositionScientistForExit
 	end
@@ -1288,3 +1289,13 @@ RustboroCity_Text_YouCanHave2On2Battle:
 	.string "they'll both challenge you.\p"
 	.string "Don't you think it'd be cool if you\n"
 	.string "could beat two TRAINERS by yourself?$"
+
+@ Hunter: the neighbor-rival fiction is deleted; auto-complete the vanilla
+@ Rustboro rival beat with everything the skipped scene would have set.
+HunterRustboro_EventScript_SkipRivalScene::
+	setvar VAR_RUSTBORO_CITY_STATE, 8
+	setvar VAR_ROUTE104_STATE, 2
+	setflag FLAG_MET_RIVAL_RUSTBORO
+	setflag FLAG_DEFEATED_RIVAL_RUSTBORO
+	setflag FLAG_HIDE_RUSTBORO_CITY_RIVAL
+	return

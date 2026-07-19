@@ -680,6 +680,12 @@ HunterMom_EventScript_Brief::
 	case MULTI_B_PRESSED, HunterMom_EventScript_ColorDone
 	copyvar VAR_UNUSED_0x4091, VAR_RESULT
 HunterMom_EventScript_ColorDone::
+	msgbox HunterMom_Text_PickSkin, MSGBOX_DEFAULT
+	multichoice 0, 0, MULTI_HUNTER_SKIN, FALSE
+	switch VAR_RESULT
+	case MULTI_B_PRESSED, HunterMom_EventScript_SkinDone
+	copyvar VAR_UNUSED_0x40A8, VAR_RESULT
+HunterMom_EventScript_SkinDone::
 	msgbox HunterMom_Text_ColorSet, MSGBOX_DEFAULT
 	release
 	end
@@ -697,6 +703,10 @@ HunterMom_Text_Brief:
 HunterMom_Text_PickColor:
 	.string "One more thing-your hunter\n"
 	.string "uniform. Pick a color.$"
+
+HunterMom_Text_PickSkin:
+	.string "And the license photo-\n"
+	.string "pick your complexion.$"
 
 HunterMom_Text_ColorSet:
 	.string "It suits you.\p"

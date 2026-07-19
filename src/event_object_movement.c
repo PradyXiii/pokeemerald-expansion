@@ -537,6 +537,8 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_PlayerFrlg,            OBJ_EVENT_PAL_TAG_PLAYER_GREEN},
     {gObjectEventPal_PlayerReflectionFrlg,  OBJ_EVENT_PAL_TAG_PLAYER_GREEN_REFLECTION},
     {gObjectEventPal_NpcBlue,               OBJ_EVENT_PAL_TAG_NPC_BLUE},
+    {gObjectEventPal_GiantGible,            OBJ_EVENT_PAL_TAG_GIANT_GIBLE},
+    {gObjectEventPal_GiantDratini,          OBJ_EVENT_PAL_TAG_GIANT_DRATINI},
     {gObjectEventPal_NpcPink,               OBJ_EVENT_PAL_TAG_NPC_PINK},
     {gObjectEventPal_NpcGreen,              OBJ_EVENT_PAL_TAG_NPC_GREEN},
     {gObjectEventPal_NpcWhite,              OBJ_EVENT_PAL_TAG_NPC_WHITE},
@@ -3377,6 +3379,27 @@ static void ApplyHunterUniformTint(u16 tag, u8 paletteNum)
     preset = VarGet(VAR_UNUSED_0x4091) % ARRAY_COUNT(sUniformAccents);
     LoadPalette(&sUniformAccents[preset][0], OBJ_PLTT_ID(paletteNum) + 12, sizeof(u16));
     LoadPalette(&sUniformAccents[preset][1], OBJ_PLTT_ID(paletteNum) + 13, sizeof(u16));
+
+    // skin tone presets overwrite the skin ramp (palette entries 1-4)
+    {
+        static const u16 sSkinTones[][4] = {
+            {RGB(31, 26, 20), RGB(30, 22, 16), RGB(27, 17, 12), RGB(19, 11,  7)}, // fair
+            {RGB(29, 22, 15), RGB(26, 18, 12), RGB(22, 14,  9), RGB(16,  9,  6)}, // tan
+            {RGB(23, 16, 11), RGB(19, 12,  8), RGB(16, 10,  6), RGB(11,  6,  4)}, // brown
+            {RGB(17, 11,  8), RGB(14,  9,  6), RGB(11,  7,  5), RGB( 8,  5,  3)}, // deep
+        };
+        u32 skin = VarGet(VAR_UNUSED_0x40A8) % ARRAY_COUNT(sSkinTones);
+        LoadPalette(sSkinTones[skin], OBJ_PLTT_ID(paletteNum) + 1, 4 * sizeof(u16));
+    }
+
+    // OTHER gender: silver-violet hair ramp (entries 5-8) for a distinct look
+    if (FlagGet(FLAG_UNUSED_0x266))
+    {
+        static const u16 sOtherHair[4] = {
+            RGB(25, 24, 27), RGB(20, 19, 23), RGB(15, 14, 18), RGB(10,  9, 13),
+        };
+        LoadPalette(sOtherHair, OBJ_PLTT_ID(paletteNum) + 5, 4 * sizeof(u16));
+    }
 }
 
 static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette)

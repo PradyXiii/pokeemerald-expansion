@@ -390,3 +390,37 @@ Route103_Text_KiraPostWin:
 	.string "where rank really lives.\l"
 	.string "Climb it. I'll be watching.\p"
 	.string "Next time, I won't hold back.$"
+
+@ Hunter: giant Dratini suns itself on the overlook - once-only catch.
+Route103_EventScript_GiantDratini::
+	lock
+	faceplayer
+	goto_if_set FLAG_UNUSED_0x274, Route103_EventScript_GiantDratiniEnd
+	msgbox Route103_Text_GiantDratini, MSGBOX_DEFAULT
+	closemessage
+	waitse
+	playmoncry SPECIES_DRATINI, CRY_MODE_ENCOUNTER
+	delay 40
+	waitmoncry
+	setwildbattle SPECIES_DRATINI, 10
+	dowildbattle
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, Route103_EventScript_GiantDratiniGone
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, Route103_EventScript_GiantDratiniGone
+	release
+	end
+
+Route103_EventScript_GiantDratiniGone::
+	setflag FLAG_UNUSED_0x274
+	removeobject LOCALID_ROUTE103_GIANT_DRATINI
+	release
+	end
+
+Route103_EventScript_GiantDratiniEnd::
+	release
+	end
+
+Route103_Text_GiantDratini:
+	.string "A DRATINI the size of a river\n"
+	.string "coils on the sunlit overlook.\p"
+	.string "Its scales throw warm light.$"
