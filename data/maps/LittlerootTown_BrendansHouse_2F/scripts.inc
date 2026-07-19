@@ -5,6 +5,7 @@ LittlerootTown_BrendansHouse_2F_MapScripts::
 
 LittlerootTown_BrendansHouse_2F_OnTransition:
 	call HunterBedroom_EventScript_SetDragonGfx
+	call HunterBedroom_EventScript_GateBrendanRoom
 	call_if_lt VAR_LITTLEROOT_RIVAL_STATE, 2, LittlerootTown_BrendansHouse_2F_EventScript_CheckSetReadyToMeetBrendan
 	call_if_ge VAR_LITTLEROOT_RIVAL_STATE, 3, LittlerootTown_BrendansHouse_2F_EventScript_CheckShouldUpdateBrendanPos
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 4, PlayersHouse_2F_EventScript_BlockStairsUntilClockIsSet
@@ -312,6 +313,42 @@ HunterBedroom_EventScript_SetDragonGfx::
 	addvar VAR_OBJ_GFX_ID_F, 16384
 	return
 
+@ Dragons live only in the PLAYER's bedroom; the same maps serve the rival.
+HunterBedroom_EventScript_ShowDragons::
+	clearflag FLAG_UNUSED_0x267
+	clearflag FLAG_UNUSED_0x268
+	clearflag FLAG_UNUSED_0x269
+	call_if_eq VAR_UNUSED_0x409D, 1, HunterBedroom_EventScript_HidePicked0
+	call_if_eq VAR_UNUSED_0x409D, 2, HunterBedroom_EventScript_HidePicked1
+	call_if_eq VAR_UNUSED_0x409D, 3, HunterBedroom_EventScript_HidePicked2
+	return
+
+HunterBedroom_EventScript_HidePicked0::
+	setflag FLAG_UNUSED_0x267
+	return
+HunterBedroom_EventScript_HidePicked1::
+	setflag FLAG_UNUSED_0x268
+	return
+HunterBedroom_EventScript_HidePicked2::
+	setflag FLAG_UNUSED_0x269
+	return
+
+HunterBedroom_EventScript_HideDragons::
+	setflag FLAG_UNUSED_0x267
+	setflag FLAG_UNUSED_0x268
+	setflag FLAG_UNUSED_0x269
+	return
+
+HunterBedroom_EventScript_GateBrendanRoom::
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, HunterBedroom_EventScript_ShowDragons
+	goto HunterBedroom_EventScript_HideDragons
+
+HunterBedroom_EventScript_GateMayRoom::
+	checkplayergender
+	goto_if_eq VAR_RESULT, FEMALE, HunterBedroom_EventScript_ShowDragons
+	goto HunterBedroom_EventScript_HideDragons
+
 HunterBedroom_EventScript_Dragon0::
 	lock
 	faceplayer
@@ -322,6 +359,7 @@ HunterBedroom_EventScript_Dragon0::
 	msgbox HunterBedroom_Text_Adopt, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, HunterBedroom_EventScript_Declined
 	givemon VAR_UNUSED_0x404E, 5
+	setvar VAR_UNUSED_0x409D, 1
 	setflag FLAG_UNUSED_0x267
 	removeobject 17
 	goto HunterBedroom_EventScript_Chosen
@@ -336,6 +374,7 @@ HunterBedroom_EventScript_Dragon1::
 	msgbox HunterBedroom_Text_Adopt, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, HunterBedroom_EventScript_Declined
 	givemon VAR_UNUSED_0x4083, 5
+	setvar VAR_UNUSED_0x409D, 2
 	setflag FLAG_UNUSED_0x268
 	removeobject 18
 	goto HunterBedroom_EventScript_Chosen
@@ -350,6 +389,7 @@ HunterBedroom_EventScript_Dragon2::
 	msgbox HunterBedroom_Text_Adopt, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, HunterBedroom_EventScript_Declined
 	givemon VAR_UNUSED_0x408B, 5
+	setvar VAR_UNUSED_0x409D, 3
 	setflag FLAG_UNUSED_0x269
 	removeobject 19
 	goto HunterBedroom_EventScript_Chosen
@@ -357,10 +397,13 @@ HunterBedroom_EventScript_Dragon2::
 HunterBedroom_EventScript_Chosen::
 	setflag FLAG_SYS_POKEMON_GET
 	setflag FLAG_RESCUED_BIRCH
-	setflag FLAG_HIDE_ROUTE_101_BIRCH_ZIGZAGOON_BATTLE
-	setflag FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG
-	setvar VAR_ROUTE101_STATE, 3
-	setvar VAR_BIRCH_LAB_STATE, 2
+	setflag FLAG_ADVENTURE_STARTED
+	setflag FLAG_SYS_POKEDEX_GET
+	setflag FLAG_RECEIVED_POKEDEX_FROM_BIRCH
+	setflag FLAG_SYS_NATIONAL_DEX
+	special EnableNationalPokedex
+	setvar VAR_BIRCH_LAB_STATE, 5
+	setvar VAR_LITTLEROOT_RIVAL_STATE, 4
 	msgbox HunterBedroom_Text_Chosen, MSGBOX_DEFAULT
 	release
 	end

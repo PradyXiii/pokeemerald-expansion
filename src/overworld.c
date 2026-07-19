@@ -1672,13 +1672,14 @@ void CB1_Overworld(void)
 
 #define TINT_NIGHT Q_8_8(0.456) | Q_8_8(0.456) << 8 | Q_8_8(0.615) << 16
 
-// Hunter: the whole day wears sun-kissed sepia; night goes deep amber
+// Hunter: no day/night tint — the sepia look is applied at palette load and
+// must stay uniform outdoors and indoors, day and night
 const struct BlendSettings gTimeOfDayBlend[] =
 {
-    [TIME_MORNING] = {.coeff = 6,  .blendColor = 0xE8B070, .isTint = TRUE},
-    [TIME_DAY]     = {.coeff = 6,  .blendColor = 0xE8B070, .isTint = TRUE},
-    [TIME_EVENING] = {.coeff = 8,  .blendColor = 0xE0A060, .isTint = TRUE},
-    [TIME_NIGHT]   = {.coeff = 8,  .blendColor = 0x906040, .isTint = TRUE},
+    [TIME_MORNING] = {.coeff = 0, .blendColor = 0, .isTint = FALSE},
+    [TIME_DAY]     = {.coeff = 0, .blendColor = 0, .isTint = FALSE},
+    [TIME_EVENING] = {.coeff = 0, .blendColor = 0, .isTint = FALSE},
+    [TIME_NIGHT]   = {.coeff = 0, .blendColor = 0, .isTint = FALSE},
 };
 
 #define DEFAULT_WEIGHT 256

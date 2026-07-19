@@ -643,6 +643,8 @@ bool8 AreLegendariesInSootopolisPreventingEncounters(void)
 
 bool8 StandardWildEncounter(u16 curMetatileBehavior, u16 prevMetatileBehavior)
 {
+    if (CalculatePlayerPartyCount() == 0)
+        return FALSE; // Hunter: no wild battles before adopting a dragon
     u32 headerId;
     enum TimeOfDay timeOfDay;
     struct Roamer *roamer;

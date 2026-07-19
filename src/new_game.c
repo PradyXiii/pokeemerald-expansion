@@ -218,6 +218,14 @@ void NewGameInitData(void)
     VarSet(VAR_LITTLEROOT_TOWN_STATE, 4);
     VarSet(VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 2);
     VarSet(VAR_LITTLEROOT_HOUSES_STATE_MAY, 2);
+    // Movers are long gone from both houses
+    FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_PLAYERS_HOUSE_VIGOROTH_1);
+    FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_PLAYERS_HOUSE_VIGOROTH_2);
+    // Route 101: no Birch rescue in this timeline — clear its actors
+    VarSet(VAR_ROUTE101_STATE, 3);
+    FlagSet(FLAG_HIDE_ROUTE_101_BIRCH_ZIGZAGOON_BATTLE);
+    FlagSet(FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG);
+    FlagSet(FLAG_HIDE_ROUTE_101_ZIGZAGOON);
 
     AddBagItem(ITEM_EXP_SHARE, 1);
     AddBagItem(ITEM_MACH_BIKE, 1);
