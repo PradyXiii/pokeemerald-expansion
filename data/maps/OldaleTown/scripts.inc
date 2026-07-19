@@ -5,24 +5,12 @@ OldaleTown_MapScripts::
 OldaleTown_OnTransition:
 	call Common_EventScript_SetupRivalGfxId
 	setflag FLAG_VISITED_OLDALE_TOWN
-	call_if_unset FLAG_ADVENTURE_STARTED, OldaleTown_EventScript_BlockWestEntrance
-	call_if_unset FLAG_RECEIVED_POTION_OLDALE, OldaleTown_EventScript_MoveMartEmployee
 	call_if_set FLAG_ADVENTURE_STARTED, OldaleTown_EventScript_SetOldaleState
 	end
 
 @ This script seems pointless because nothing uses VAR_OLDALE_TOWN_STATE
 OldaleTown_EventScript_SetOldaleState::
 	setvar VAR_OLDALE_TOWN_STATE, 1
-	return
-
-OldaleTown_EventScript_BlockWestEntrance::
-	setobjectxyperm LOCALID_FOOTPRINTS_MAN, 1, 11
-	setobjectmovementtype LOCALID_FOOTPRINTS_MAN, MOVEMENT_TYPE_FACE_LEFT
-	return
-
-OldaleTown_EventScript_MoveMartEmployee::
-	setobjectxyperm LOCALID_OLDALE_MART_EMPLOYEE, 13, 14
-	setobjectmovementtype LOCALID_OLDALE_MART_EMPLOYEE, MOVEMENT_TYPE_FACE_DOWN
 	return
 
 OldaleTown_EventScript_TownSign::
@@ -33,50 +21,22 @@ OldaleTown_EventScript_Girl::
 	msgbox OldaleTown_Text_SavingMyProgress, MSGBOX_NPC
 	end
 
+@ Hunter: escort cutscene removed (its walk paths assumed the old map).
+@ The station clerk hands over the Potion on the spot.
 OldaleTown_EventScript_MartEmployee::
 	lock
 	faceplayer
 	goto_if_set FLAG_RECEIVED_POTION_OLDALE, OldaleTown_EventScript_ExplainPotion
-	goto_if_set FLAG_TEMP_1, OldaleTown_EventScript_ExplainPotion
-	setflag FLAG_TEMP_1
-	playbgm MUS_FOLLOW_ME, FALSE
-	msgbox OldaleTown_Text_IWorkAtPokemonMart, MSGBOX_DEFAULT
-	closemessage
-	switch VAR_FACING
-	case DIR_SOUTH, OldaleTown_EventScript_GoToMartSouth
-	case DIR_NORTH, OldaleTown_EventScript_GoToMartNorth
-	case DIR_EAST, OldaleTown_EventScript_GoToMartEast
-	end
-
-OldaleTown_EventScript_GoToMartSouth::
-	applymovement LOCALID_OLDALE_MART_EMPLOYEE, OldaleTown_Movement_EmployeeSouth
-	applymovement LOCALID_PLAYER, OldaleTown_Movement_PlayerSouth
-	waitmovement 0
-	goto OldaleTown_EventScript_ExplainPokemonMart
-	end
-
-OldaleTown_EventScript_GoToMartNorth::
-	applymovement LOCALID_OLDALE_MART_EMPLOYEE, OldaleTown_Movement_EmployeeNorth
-	applymovement LOCALID_PLAYER, OldaleTown_Movement_PlayerNorth
-	waitmovement 0
-	goto OldaleTown_EventScript_ExplainPokemonMart
-	end
-
-OldaleTown_EventScript_GoToMartEast::
-	applymovement LOCALID_PLAYER, OldaleTown_Movement_PlayerEast
-	applymovement LOCALID_OLDALE_MART_EMPLOYEE, OldaleTown_Movement_EmployeeEast
-	waitmovement 0
-	goto OldaleTown_EventScript_ExplainPokemonMart
-	end
-
-OldaleTown_EventScript_ExplainPokemonMart::
-	msgbox OldaleTown_Text_ThisIsAPokemonMart, MSGBOX_DEFAULT
+	msgbox OldaleTown_Text_StationClerk, MSGBOX_DEFAULT
 	giveitem ITEM_POTION
 	goto_if_eq VAR_RESULT, FALSE, OldaleTown_EventScript_BagIsFull
 	msgbox OldaleTown_Text_PotionExplanation, MSGBOX_DEFAULT
 	setflag FLAG_RECEIVED_POTION_OLDALE
-	fadedefaultbgm
 	release
+	end
+
+OldaleTown_EventScript_GuildBoard::
+	msgbox OldaleTown_Text_GuildBoard, MSGBOX_SIGN
 	end
 
 OldaleTown_EventScript_ExplainPotion::
@@ -187,33 +147,8 @@ OldaleTown_Movement_Unknown2:
 	walk_up
 	step_end
 
-OldaleTown_EventScript_FootprintsMan::
-	lock
-	faceplayer
-	goto_if_set FLAG_ADVENTURE_STARTED, OldaleTown_EventScript_NotBlockingPath
-	msgbox OldaleTown_Text_DiscoveredFootprints, MSGBOX_DEFAULT
-	closemessage
-	applymovement LOCALID_FOOTPRINTS_MAN, Common_Movement_FaceOriginalDirection
-	waitmovement 0
-	release
-	end
-
-OldaleTown_EventScript_BlockedPath::
-	lockall
-	applymovement LOCALID_PLAYER, OldaleTown_Movement_PlayerStepBack
-	applymovement LOCALID_FOOTPRINTS_MAN, OldaleTown_Movement_BackUp
-	waitmovement 0
-	msgbox OldaleTown_Text_WaitDontComeInHere, MSGBOX_DEFAULT
-	closemessage
-	applymovement LOCALID_FOOTPRINTS_MAN, OldaleTown_Movement_ReturnToOriginalPosition
-	waitmovement 0
-	releaseall
-	end
-
-OldaleTown_EventScript_NotBlockingPath::
-	msgbox OldaleTown_Text_FinishedSketchingFootprints, MSGBOX_DEFAULT
-	release
-	end
+@ Hunter: the sketch artist who blocked Route 102 is deleted outright
+@ (object, blocker trigger, and scripts). Nothing gates the west exit.
 
 OldaleTown_EventScript_Rival::
 	lockall
@@ -321,24 +256,6 @@ OldaleTown_Movement_WatchRivalExit:
 	walk_in_place_faster_down
 	step_end
 
-OldaleTown_Movement_PlayerStepBack:
-	delay_8
-	walk_right
-	step_end
-
-OldaleTown_Movement_BackUp:
-	walk_fast_up
-	walk_in_place_faster_left
-	lock_facing_direction
-	walk_right
-	unlock_facing_direction
-	step_end
-
-OldaleTown_Movement_ReturnToOriginalPosition:
-	walk_down
-	walk_left
-	step_end
-
 OldaleTown_Text_SavingMyProgress:
 	.string "I want to take a rest, so I'm saving my\n"
 	.string "progress.$"
@@ -392,6 +309,19 @@ OldaleTown_Text_BrendanLetsGoBack:
 	.string "{PLAYER}, you should hustle back, too.$"
 
 OldaleTown_Text_TownSign:
-	.string "OLDALE TOWN\n"
-	.string "“Where things start off scarce.”$"
+	.string "WAYPOINT OLD DALE\n"
+	.string "“Rest, resupply, move on.”$"
 
+
+OldaleTown_Text_StationClerk:
+	.string "Station clerk. MART counter is\n"
+	.string "inside, left window.\p"
+	.string "Take this for the road.$"
+
+OldaleTown_Text_GuildBoard:
+	.string "GUILD NOTICE BOARD\p"
+	.string "GUILDSTONE MAIN HALL: ranked\n"
+	.string "ladder open. Warden ROXANNE\l"
+	.string "examines Rank II holders.\p"
+	.string "ROUTE 103: officer KIRA on\n"
+	.string "patrol. Rookies, report to her.$"

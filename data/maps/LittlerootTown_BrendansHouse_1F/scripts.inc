@@ -27,7 +27,93 @@ LittlerootTown_BrendansHouse_1F_OnTransition:
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 3, LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToDoor
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 5, LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToStairs
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 6, LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToTV
+	call HunterGuildOffice_EventScript_VisibilityBrendanHouse
 	end
+
+@ Hunter: the non-player house is the DRAGONFALL GUILD OFFICE. Office staff
+@ (officer + Kira) exist in both house maps; visibility is recomputed on
+@ every transition so only the house the player does NOT live in shows them.
+HunterGuildOffice_EventScript_VisibilityBrendanHouse::
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, HunterGuildOffice_EventScript_HideOffice
+	goto HunterGuildOffice_EventScript_ShowOffice
+
+HunterGuildOffice_EventScript_VisibilityMaysHouse::
+	checkplayergender
+	goto_if_eq VAR_RESULT, FEMALE, HunterGuildOffice_EventScript_HideOffice
+	goto HunterGuildOffice_EventScript_ShowOffice
+
+HunterGuildOffice_EventScript_HideOffice::
+	setflag FLAG_UNUSED_0x26A
+	setflag FLAG_UNUSED_0x26B
+	return
+
+HunterGuildOffice_EventScript_ShowOffice::
+	clearflag FLAG_UNUSED_0x26A
+	goto_if_set FLAG_UNUSED_0x26C, HunterGuildOffice_EventScript_KiraIsGone
+	goto_if_set FLAG_UNUSED_0x26D, HunterGuildOffice_EventScript_KiraIsGone
+	clearflag FLAG_UNUSED_0x26B
+	return
+
+HunterGuildOffice_EventScript_KiraIsGone::
+	setflag FLAG_UNUSED_0x26B
+	return
+
+HunterGuildOffice_EventScript_Officer::
+	lock
+	faceplayer
+	msgbox HunterGuildOffice_Text_Officer, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_Kira::
+	lock
+	faceplayer
+	msgbox HunterGuildOffice_Text_KiraIntro, MSGBOX_DEFAULT
+	closemessage
+	playse SE_EXIT
+	fadescreen FADE_TO_BLACK
+	setflag FLAG_UNUSED_0x26C
+	setflag FLAG_UNUSED_0x26B
+	removeobject LOCALID_GUILD_OFFICE_KIRA
+	fadescreen FADE_FROM_BLACK
+	msgbox HunterGuildOffice_Text_KiraLeft, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_NoticeBoard::
+	msgbox HunterGuildOffice_Text_NoticeBoard, MSGBOX_SIGN
+	end
+
+HunterGuildOffice_Text_Officer:
+	.string "Guild desk. License checks,\n"
+	.string "bounty intake, intel.\p"
+	.string "Your license is active, hunter.\n"
+	.string "This branch is too small to rank you.\p"
+	.string "The main hall in GUILDSTONE CITY\n"
+	.string "runs the ladder. Start there.$"
+
+HunterGuildOffice_Text_KiraIntro:
+	.string "KIRA: New face. You're the\n"
+	.string "licensee with the dragon, right?\p"
+	.string "I'm KIRA. Junior officer of this\n"
+	.string "branch. Top blade, for now.\p"
+	.string "Words are cheap in this trade.\n"
+	.string "Meet me on ROUTE 103, past\l"
+	.string "OLD DALE. Bring that dragon.\p"
+	.string "I'll show you what guild rank\n"
+	.string "actually means.$"
+
+HunterGuildOffice_Text_KiraLeft:
+	.string "KIRA is gone.\p"
+	.string "The door is still swinging.$"
+
+HunterGuildOffice_Text_NoticeBoard:
+	.string "GUILD NOTICE BOARD\p"
+	.string "RANKED LADDER: open at the main\n"
+	.string "hall, GUILDSTONE CITY.\p"
+	.string "MIGRANT ACTIVITY: HIGH on all\n"
+	.string "routes. Hunt with a partner.$"
 
 LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToStairs::
 	setobjectxyperm LOCALID_PLAYERS_HOUSE_1F_MOM, 8, 4

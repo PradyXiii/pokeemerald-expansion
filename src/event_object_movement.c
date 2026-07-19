@@ -3388,7 +3388,6 @@ static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette
     if (paletteNum != 0xFF)
     {
         ApplyHunterUniformTint(spritePalette->tag, paletteNum);
-        HunterSepiaPalette(OBJ_PLTT_ID(paletteNum), 16);
         UpdateSpritePaletteWithWeather(paletteNum, FALSE);
     }
     return paletteNum;

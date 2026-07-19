@@ -1,0 +1,2 @@
+sepia curve baked; do not re-run bake_sepia.py
+also baked data/tilesets/**/palettes/*.pal

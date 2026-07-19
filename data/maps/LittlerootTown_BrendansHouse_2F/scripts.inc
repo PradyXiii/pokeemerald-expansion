@@ -435,3 +435,54 @@ HunterBedroom_Text_Freed:
 HunterBedroom_Text_Declined:
 	.string "It watches you pace around\n"
 	.string "the room.$"
+
+HunterGate_EventScript_BrendansHouse_0::
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterGate_EventScript_Allow
+	lockall
+	msgbox HunterGate_Text_MomVoice, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_PLAYER, HunterGate_Movement_PushLeft
+	waitmovement 0
+	releaseall
+	end
+HunterGate_EventScript_BrendansHouse_1::
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterGate_EventScript_Allow
+	lockall
+	msgbox HunterGate_Text_MomVoice, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_PLAYER, HunterGate_Movement_PushDown
+	waitmovement 0
+	releaseall
+	end
+HunterGate_EventScript_MaysHouse_0::
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterGate_EventScript_Allow
+	lockall
+	msgbox HunterGate_Text_MomVoice, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_PLAYER, HunterGate_Movement_PushRight
+	waitmovement 0
+	releaseall
+	end
+HunterGate_EventScript_MaysHouse_1::
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterGate_EventScript_Allow
+	lockall
+	msgbox HunterGate_Text_MomVoice, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_PLAYER, HunterGate_Movement_PushDown
+	waitmovement 0
+	releaseall
+	end
+HunterGate_EventScript_Allow::
+	end
+HunterGate_Movement_PushLeft:
+	walk_left
+	step_end
+HunterGate_Movement_PushRight:
+	walk_right
+	step_end
+HunterGate_Movement_PushDown:
+	walk_down
+	step_end
+HunterGate_Text_MomVoice:
+	.string "MOM's voice: Not without a partner,\n"
+	.string "{PLAYER}! Choose one of the dragons!$"

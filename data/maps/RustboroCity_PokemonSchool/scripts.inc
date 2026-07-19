@@ -134,17 +134,15 @@ RustboroCity_PokemonSchool_EventScript_Scott::
 
 RustboroCity_PokemonSchool_EventScript_Blackboard::
 	lockall
-	goto_if_set FLAG_UNUSED_0x265, RustboroCity_PokemonSchool_EventScript_LensOn
-	setflag FLAG_UNUSED_0x265
-	msgbox RustboroCity_PokemonSchool_Text_LensDisabled, MSGBOX_DEFAULT
+	msgbox RustboroCity_PokemonSchool_Text_LadderRules, MSGBOX_DEFAULT
 	releaseall
 	end
 
-RustboroCity_PokemonSchool_EventScript_LensOn::
-	clearflag FLAG_UNUSED_0x265
-	msgbox RustboroCity_PokemonSchool_Text_LensEnabled, MSGBOX_DEFAULT
-	releaseall
-	end
+RustboroCity_PokemonSchool_Text_LadderRules:
+	.string "Chalked on the board:\p"
+	.string "LADDER RULES. Challenge in\n"
+	.string "order. No items mid-bout.\l"
+	.string "Rank is earned, never given.$"
 
 RustboroCity_PokemonSchool_EventScript_StudentNotebook::
 	lockall
@@ -153,7 +151,7 @@ RustboroCity_PokemonSchool_EventScript_StudentNotebook::
 	end
 
 RustboroCity_PokemonSchool_Text_ReceptionistIntro:
-	.string "Hunter Guild, Rustboro branch.\p"
+	.string "Hunter Guild, GUILDSTONE main hall.\p"
 	.string "Four ranked fighters hold this\n"
 	.string "floor. Beat them in order-\l"
 	.string "Rank V first.\p"
@@ -163,7 +161,7 @@ RustboroCity_PokemonSchool_Text_ReceptionistIntro:
 RustboroCity_PokemonSchool_Text_ReceptionistReward:
 	.string "Ladder clear!\p"
 	.string "By Guild charter, you now hold\n"
-	.string "Rank II in Rustboro.\p"
+	.string "Rank II in GUILDSTONE.\p"
 	.string "Your issue: TM39 Rock Tomb.$"
 
 RustboroCity_PokemonSchool_Text_ReceptionistMasterAway:

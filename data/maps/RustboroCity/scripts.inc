@@ -1246,7 +1246,7 @@ RustboroCity_Text_CitySign:
 	.string "nature and science.”$"
 
 RustboroCity_Text_TrainersSchoolSign:
-	.string "HUNTER GUILD-RUSTBORO BRANCH\n"
+	.string "HUNTER GUILD-GUILDSTONE MAIN HALL\n"
 	.string "Ranked ladder inside. All\l"
 	.string "licensed hunters welcome.$"
 

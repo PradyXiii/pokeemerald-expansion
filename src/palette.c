@@ -874,24 +874,6 @@ void TimeBlendPalette(u16 palOffset, u32 coeff, u32 blendColor)
 // Blends a weighted average of two blend parameters
 // Parameters can be either blended (as in BlendPalettes) or tinted (as in TintPaletteRGB_Copy)
 // Hunter: warm sepia applied directly to palette buffers (flag 0x265 disables)
-void HunterSepiaPalette(u16 offset, u16 count)
-{
-    u32 i;
-    if (FlagGet(FLAG_UNUSED_0x265))
-        return;
-    for (i = 0; i < count; i++)
-    {
-        u16 c = gPlttBufferUnfaded[offset + i];
-        u32 r = c & 0x1F, g = (c >> 5) & 0x1F, b = (c >> 10) & 0x1F;
-        r = r + (31 - r) / 5;
-        g = g - g / 8;
-        b = b - b / 3;
-        c = r | (g << 5) | (b << 10);
-        gPlttBufferUnfaded[offset + i] = c;
-        gPlttBufferFaded[offset + i] = c;
-    }
-}
-
 void TimeMixPalettes(u32 palettes, u16 *src, u16 *dst, struct BlendSettings *blend0, struct BlendSettings *blend1, u16 weight0)
 {
     s32 r0, g0, b0, r1, g1, b1, defR, defG, defB, altR, altG, altB;

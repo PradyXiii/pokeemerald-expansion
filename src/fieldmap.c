@@ -1002,7 +1002,7 @@ static void CopyTilesetToVramUsingHeap(struct Tileset const *tileset, u16 numTil
 // Below two are dummied functions from FRLG, used to tint the overworld palettes for the Quest Log
 static void ApplyGlobalTintToPaletteEntries(u16 offset, u16 size)
 {
-    HunterSepiaPalette(offset, size);
+
 }
 
 static void UNUSED ApplyGlobalTintToPaletteSlot(u8 slot, u8 count)
