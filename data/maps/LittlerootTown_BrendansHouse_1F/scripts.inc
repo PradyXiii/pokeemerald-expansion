@@ -27,37 +27,7 @@ LittlerootTown_BrendansHouse_1F_OnTransition:
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 3, LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToDoor
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 5, LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToStairs
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 6, LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToTV
-	call HunterGuildOffice_EventScript_VisibilityBrendanHouse
 	end
-
-@ Hunter: the non-player house is the DRAGONFALL GUILD OFFICE. Office staff
-@ (officer + Kira) exist in both house maps; visibility is recomputed on
-@ every transition so only the house the player does NOT live in shows them.
-HunterGuildOffice_EventScript_VisibilityBrendanHouse::
-	checkplayergender
-	goto_if_eq VAR_RESULT, MALE, HunterGuildOffice_EventScript_HideOffice
-	goto HunterGuildOffice_EventScript_ShowOffice
-
-HunterGuildOffice_EventScript_VisibilityMaysHouse::
-	checkplayergender
-	goto_if_eq VAR_RESULT, FEMALE, HunterGuildOffice_EventScript_HideOffice
-	goto HunterGuildOffice_EventScript_ShowOffice
-
-HunterGuildOffice_EventScript_HideOffice::
-	setflag FLAG_UNUSED_0x26A
-	setflag FLAG_UNUSED_0x26B
-	return
-
-HunterGuildOffice_EventScript_ShowOffice::
-	clearflag FLAG_UNUSED_0x26A
-	goto_if_set FLAG_UNUSED_0x26C, HunterGuildOffice_EventScript_KiraIsGone
-	goto_if_set FLAG_UNUSED_0x26D, HunterGuildOffice_EventScript_KiraIsGone
-	clearflag FLAG_UNUSED_0x26B
-	return
-
-HunterGuildOffice_EventScript_KiraIsGone::
-	setflag FLAG_UNUSED_0x26B
-	return
 
 @ Dragonfall ladder state (VAR_UNUSED_0x40A1):
 @ 0 = fresh, 1 = scout beaten, 2 = blade beaten (clear), 3 = rewarded
@@ -235,6 +205,7 @@ LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToDoor::
 @ Many of the below scripts have no gender check because they assume youre in the correct house
 @ The below SS Ticket script uses Mays house state by accident(?), but theyre both set identically after the intro
 LittlerootTown_BrendansHouse_1F_OnFrame:
+	map_script_2 VAR_TEMP_2, 0, LittlerootTown_BrendansHouse_1F_EventScript_MaybeGuildHall
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 3, LittlerootTown_BrendansHouse_1F_EventScript_EnterHouseMovingIn
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 5, LittlerootTown_BrendansHouse_1F_EventScript_GoUpstairsToSetClock
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 6, LittlerootTown_BrendansHouse_1F_EventScript_PetalburgGymReport
@@ -622,3 +593,19 @@ PlayersHouse_1F_Text_WhatColorDidTheySay:
 PlayersHouse_1F_Text_StillUnknownPokemon:
 	.string "MOM: Well, isn't that something!\n"
 	.string "There are still unknown POKéMON.$"
+
+@ Hunter: for a female/OTHER player this building is the GUILD HALL -
+@ entering redirects into the dedicated hall map; exit returns here.
+LittlerootTown_BrendansHouse_1F_EventScript_MaybeGuildHall::
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, LittlerootTown_BrendansHouse_1F_EventScript_NotHall
+	lockall
+	setdynamicwarp MAP_LITTLEROOT_TOWN, 255, 5, 9
+	warpsilent MAP_LITTLEROOT_TOWN_GUILD_HALL, 5, 9
+	waitstate
+	releaseall
+	end
+
+LittlerootTown_BrendansHouse_1F_EventScript_NotHall::
+	setvar VAR_TEMP_2, 1
+	end

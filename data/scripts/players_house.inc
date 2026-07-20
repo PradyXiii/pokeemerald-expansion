@@ -686,6 +686,20 @@ HunterMom_EventScript_ColorDone::
 	case MULTI_B_PRESSED, HunterMom_EventScript_SkinDone
 	copyvar VAR_UNUSED_0x40A8, VAR_RESULT
 HunterMom_EventScript_SkinDone::
+	msgbox HunterMom_Text_PickDifficulty, MSGBOX_DEFAULT
+	multichoice 0, 0, MULTI_HUNTER_DIFFICULTY, FALSE
+	switch VAR_RESULT
+	case 0, HunterMom_EventScript_SetEasy
+	case 2, HunterMom_EventScript_SetHard
+	setvar VAR_UNUSED_0x40B8, 0
+	goto HunterMom_EventScript_DifficultyDone
+HunterMom_EventScript_SetEasy::
+	setvar VAR_UNUSED_0x40B8, 1
+	goto HunterMom_EventScript_DifficultyDone
+HunterMom_EventScript_SetHard::
+	setvar VAR_UNUSED_0x40B8, 2
+HunterMom_EventScript_DifficultyDone::
+	special HunterRefreshPlayerPalette
 	msgbox HunterMom_Text_ColorSet, MSGBOX_DEFAULT
 	release
 	end
@@ -707,6 +721,12 @@ HunterMom_Text_PickColor:
 HunterMom_Text_PickSkin:
 	.string "And the license photo-\n"
 	.string "pick your complexion.$"
+
+HunterMom_Text_PickDifficulty:
+	.string "Last one. How hard should the\n"
+	.string "roads be on you?\p"
+	.string "Come back to me anytime to\n"
+	.string "change your mind.$"
 
 HunterMom_Text_ColorSet:
 	.string "It suits you.\p"

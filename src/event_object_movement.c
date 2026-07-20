@@ -539,6 +539,8 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_NpcBlue,               OBJ_EVENT_PAL_TAG_NPC_BLUE},
     {gObjectEventPal_GiantGible,            OBJ_EVENT_PAL_TAG_GIANT_GIBLE},
     {gObjectEventPal_GiantDratini,          OBJ_EVENT_PAL_TAG_GIANT_DRATINI},
+    {gObjectEventPal_GiantBagon,            OBJ_EVENT_PAL_TAG_GIANT_BAGON},
+    {gObjectEventPal_GiantAxew,             OBJ_EVENT_PAL_TAG_GIANT_AXEW},
     {gObjectEventPal_NpcPink,               OBJ_EVENT_PAL_TAG_NPC_PINK},
     {gObjectEventPal_NpcGreen,              OBJ_EVENT_PAL_TAG_NPC_GREEN},
     {gObjectEventPal_NpcWhite,              OBJ_EVENT_PAL_TAG_NPC_WHITE},
@@ -3400,6 +3402,17 @@ static void ApplyHunterUniformTint(u16 tag, u8 paletteNum)
         };
         LoadPalette(sOtherHair, OBJ_PLTT_ID(paletteNum) + 5, 4 * sizeof(u16));
     }
+}
+
+// Hunter: re-apply uniform/skin/hair tint immediately after the picker
+void HunterRefreshPlayerPalette(void)
+{
+    u8 palNum = IndexOfSpritePaletteTag(OBJ_EVENT_PAL_TAG_BRENDAN);
+    if (palNum != 0xFF)
+        ApplyHunterUniformTint(OBJ_EVENT_PAL_TAG_BRENDAN, palNum);
+    palNum = IndexOfSpritePaletteTag(OBJ_EVENT_PAL_TAG_MAY);
+    if (palNum != 0xFF)
+        ApplyHunterUniformTint(OBJ_EVENT_PAL_TAG_MAY, palNum);
 }
 
 static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette)

@@ -1,4 +1,6 @@
 #include "global.h"
+
+uintptr_t gDecompressCallerLR; // Hunter: last caller of a header decompress, for the error screen
 #include "malloc.h"
 #include "data.h"
 #include "decompress.h"
@@ -260,6 +262,7 @@ void HandleLoadSpecialPokePicIsEgg(bool32 isFrontPic, void *dest, enum Species s
 //  VRAM version
 void DecompressDataWithHeaderVram(const u32 *src, void *dest)
 {
+    gDecompressCallerLR = (uintptr_t)__builtin_return_address(0);
     union CompressionHeader header;
     CpuCopy32(src, &header, 8);
     switch (header.smol.mode)
@@ -288,6 +291,7 @@ void DecompressDataWithHeaderVram(const u32 *src, void *dest)
 //  WRAM version
 void DecompressDataWithHeaderWram(const u32 *src, void *dest)
 {
+    gDecompressCallerLR = (uintptr_t)__builtin_return_address(0);
     union CompressionHeader header;
     CpuCopy32(src, &header, 8);
     switch (header.smol.mode)
