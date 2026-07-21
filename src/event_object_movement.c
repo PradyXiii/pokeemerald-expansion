@@ -3357,6 +3357,62 @@ static void UNUSED LoadObjectEventPaletteSet(u16 *paletteTags)
 }
 
 // Really just loads the palette and applies weather fade
+// Hunter: 6 issued uniform colors; accent palette entries 12/13 are recolored per preset
+void HunterTintPaletteSlot(u8 paletteNum);
+static void ApplyHunterUniformTint(u16 tag, u8 paletteNum)
+{
+    if (tag != OBJ_EVENT_PAL_TAG_BRENDAN && tag != OBJ_EVENT_PAL_TAG_MAY
+     && tag != OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION && tag != OBJ_EVENT_PAL_TAG_MAY_REFLECTION)
+        return;
+    HunterTintPaletteSlot(paletteNum);
+}
+
+// Hunter: apply uniform/skin/hair customization directly to a palette slot
+void HunterTintPaletteSlot(u8 paletteNum)
+{
+    static const u16 sUniformAccents[][2] = {
+        {RGB(31, 12, 11), RGB(24,  8,  8)}, // crimson
+        {RGB(11, 17, 31), RGB( 5, 10, 24)}, // azure
+        {RGB(11, 25, 14), RGB( 4, 16,  8)}, // verdant
+        {RGB(22, 14, 31), RGB(14,  6, 22)}, // violet
+        {RGB(11, 11, 12), RGB( 5,  5,  6)}, // onyx
+        {RGB(31, 25, 10), RGB(25, 17,  4)}, // gold
+    };
+    u32 preset = VarGet(VAR_UNUSED_0x4091) % ARRAY_COUNT(sUniformAccents);
+    LoadPalette(&sUniformAccents[preset][0], OBJ_PLTT_ID(paletteNum) + 12, sizeof(u16));
+    LoadPalette(&sUniformAccents[preset][1], OBJ_PLTT_ID(paletteNum) + 13, sizeof(u16));
+
+    // skin tone presets overwrite the skin ramp (palette entries 1-4)
+    {
+        static const u16 sSkinTones[][4] = {
+            {RGB(31, 26, 20), RGB(30, 22, 16), RGB(27, 17, 12), RGB(19, 11,  7)}, // fair
+            {RGB(29, 22, 15), RGB(26, 18, 12), RGB(22, 14,  9), RGB(16,  9,  6)}, // tan
+            {RGB(23, 16, 11), RGB(19, 12,  8), RGB(16, 10,  6), RGB(11,  6,  4)}, // brown
+            {RGB(17, 11,  8), RGB(14,  9,  6), RGB(11,  7,  5), RGB( 8,  5,  3)}, // deep
+        };
+        u32 skin = VarGet(VAR_UNUSED_0x40A8) % ARRAY_COUNT(sSkinTones);
+        LoadPalette(sSkinTones[skin], OBJ_PLTT_ID(paletteNum) + 1, 4 * sizeof(u16));
+    }
+
+    // OTHER gender: silver-violet hair ramp (entries 5-8) for a distinct look
+    if (FlagGet(FLAG_UNUSED_0x266))
+    {
+        static const u16 sOtherHair[4] = {
+            RGB(25, 24, 27), RGB(20, 19, 23), RGB(15, 14, 18), RGB(10,  9, 13),
+        };
+        LoadPalette(sOtherHair, OBJ_PLTT_ID(paletteNum) + 5, 4 * sizeof(u16));
+    }
+}
+
+// Hunter: re-tint the LIVE player overworld sprite's actual palette slot -
+// the only slot the player is truly rendered from, regardless of tag/timing
+void HunterRefreshPlayerPalette(void)
+{
+    u8 spriteId = gPlayerAvatar.spriteId;
+    if (spriteId < MAX_SPRITES)
+        HunterTintPaletteSlot(gSprites[spriteId].oam.paletteNum);
+}
+
 static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette)
 {
     u8 paletteNum = IndexOfSpritePaletteTag(spritePalette->tag);
@@ -3364,7 +3420,10 @@ static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette
         return paletteNum;
     paletteNum = LoadSpritePalette(spritePalette);
     if (paletteNum != 0xFF)
+    {
+        ApplyHunterUniformTint(spritePalette->tag, paletteNum);
         UpdateSpritePaletteWithWeather(paletteNum, FALSE);
+    }
     return paletteNum;
 }
 
@@ -3374,6 +3433,9 @@ void PatchObjectPalette(u16 paletteTag, u8 paletteSlot)
     u8 paletteIndex = FindObjectEventPaletteIndexByTag(paletteTag);
 
     LoadPalette(sObjectEventSpritePalettes[paletteIndex].data, OBJ_PLTT_ID(paletteSlot), PLTT_SIZE_4BPP);
+    // Hunter: this slot path is how the PLAYER's palette actually loads on
+    // every map - apply uniform/skin/hair customization here too
+    ApplyHunterUniformTint(paletteTag, paletteSlot);
 }
 
 void PatchObjectPaletteRange(const u16 *paletteTags, u8 minSlot, u8 maxSlot)

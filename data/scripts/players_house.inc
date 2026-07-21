@@ -304,7 +304,7 @@ PlayersHouse_1F_EventScript_Mom::
 	goto_if_set FLAG_HAS_MATCH_CALL, PlayersHouse_1F_EventScript_TryRegisterMom
 	goto_if_set FLAG_RESCUED_BIRCH, PlayersHouse_1F_EventScript_MomHealsParty
 	goto_if_eq VAR_TEMP_1, 1, PlayersHouse_1F_EventScript_SeeYouHoney
-	goto_if_eq VAR_LITTLEROOT_INTRO_STATE, 7, PlayersHouse_1F_EventScript_DidYouMeetProfBirch
+	goto_if_eq VAR_LITTLEROOT_INTRO_STATE, 7, HunterMom_EventScript_Brief
 	msgbox PlayersHouse_1F_Text_IsntItNiceInHere, MSGBOX_DEFAULT
 	release
 	end
@@ -671,3 +671,65 @@ PlayersHouse_1F_Movement_PlayerApproachTVForLatiFemale:
 EventScript_RunningShoesManual::
 	msgbox PlayersHouse_1F_Text_RunningShoesManual, MSGBOX_SIGN
 	end
+
+HunterMom_EventScript_Brief::
+	msgbox HunterMom_Text_Brief, MSGBOX_DEFAULT
+	msgbox HunterMom_Text_PickColor, MSGBOX_DEFAULT
+	multichoice 0, 0, MULTI_HUNTER_COLORS, FALSE
+	switch VAR_RESULT
+	case MULTI_B_PRESSED, HunterMom_EventScript_ColorDone
+	copyvar VAR_UNUSED_0x4091, VAR_RESULT
+HunterMom_EventScript_ColorDone::
+	msgbox HunterMom_Text_PickSkin, MSGBOX_DEFAULT
+	multichoice 0, 0, MULTI_HUNTER_SKIN, FALSE
+	switch VAR_RESULT
+	case MULTI_B_PRESSED, HunterMom_EventScript_SkinDone
+	copyvar VAR_UNUSED_0x40A8, VAR_RESULT
+HunterMom_EventScript_SkinDone::
+	msgbox HunterMom_Text_PickDifficulty, MSGBOX_DEFAULT
+	multichoice 0, 0, MULTI_HUNTER_DIFFICULTY, FALSE
+	switch VAR_RESULT
+	case 0, HunterMom_EventScript_SetEasy
+	case 2, HunterMom_EventScript_SetHard
+	setvar VAR_UNUSED_0x40B8, 0
+	goto HunterMom_EventScript_DifficultyDone
+HunterMom_EventScript_SetEasy::
+	setvar VAR_UNUSED_0x40B8, 1
+	goto HunterMom_EventScript_DifficultyDone
+HunterMom_EventScript_SetHard::
+	setvar VAR_UNUSED_0x40B8, 2
+HunterMom_EventScript_DifficultyDone::
+	special HunterRefreshPlayerPalette
+	msgbox HunterMom_Text_ColorSet, MSGBOX_DEFAULT
+	release
+	end
+
+HunterMom_Text_Brief:
+	.string "Settled in from the drive?\n"
+	.string "The movers' car just left.\p"
+	.string "Your HOVER BOARD is in your bag,\n"
+	.string "already keyed to you.\p"
+	.string "Tap B or SELECT anytime to glide.\p"
+	.string "Now go upstairs-three dragons\n"
+	.string "are waiting. One is your partner.\p"
+	.string "I'll look after the other two.$"
+
+HunterMom_Text_PickColor:
+	.string "One more thing-your hunter\n"
+	.string "uniform. Pick a color.$"
+
+HunterMom_Text_PickSkin:
+	.string "And the license photo-\n"
+	.string "pick your complexion.$"
+
+HunterMom_Text_PickDifficulty:
+	.string "Last one. How hard should the\n"
+	.string "roads be on you?\p"
+	.string "Come back to me anytime to\n"
+	.string "change your mind.$"
+
+HunterMom_Text_ColorSet:
+	.string "It suits you.\p"
+	.string "It shows the next time you\n"
+	.string "step through a door.\p"
+	.string "Come back anytime to change it.$"

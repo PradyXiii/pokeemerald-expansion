@@ -8,6 +8,7 @@
 #include "faraway_island.h"
 #include "follower_npc.h"
 #include "event_data.h"
+#include "item.h"
 #include "event_object_movement.h"
 #include "event_scripts.h"
 #include "fieldmap.h"
@@ -235,6 +236,11 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         return TRUE;
 
     if (input->pressedSelectButton && UseRegisteredKeyItemOnField() == TRUE)
+        return TRUE;
+    // Hunter: B taps the hover board on/off (same as using the registered board)
+    if (input->pressedBButton && CheckBagHasItem(ITEM_MACH_BIKE, 1)
+     && gSaveBlock1Ptr->registeredItem == ITEM_MACH_BIKE
+     && UseRegisteredKeyItemOnField() == TRUE)
         return TRUE;
 
     if (input->pressedRButton && TryStartDexNavSearch())
@@ -641,7 +647,8 @@ static const u8 *GetInteractedWaterScript(struct MapPosition *unused1, u8 metati
 {
     if (MetatileBehavior_IsFastWater(metatileBehavior) == TRUE && !TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
         return EventScript_CurrentTooFast;
-    if (IsFieldMoveUnlocked(FIELD_MOVE_SURF) && PartyHasMonWithSurf() == TRUE && IsPlayerFacingSurfableFishableWater() == TRUE
+    // Hunter: the hover board IS surf - no HM, no party check
+    if (CheckBagHasItem(ITEM_MACH_BIKE, 1) && IsPlayerFacingSurfableFishableWater() == TRUE
      && CheckFollowerNPCFlag(FOLLOWER_NPC_FLAG_CAN_SURF)
      )
         return EventScript_UseSurf;

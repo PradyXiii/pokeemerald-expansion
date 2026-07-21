@@ -46,6 +46,7 @@ LittlerootTown_MaysHouse_1F_EventScript_MoveMomToDoor::
 
 @ Many of the below scripts have no gender check because they assume youre in the correct house
 LittlerootTown_MaysHouse_1F_OnFrame:
+	map_script_2 VAR_TEMP_2, 0, LittlerootTown_MaysHouse_1F_EventScript_MaybeGuildHall
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 3, LittlerootTown_MaysHouse_1F_EventScript_EnterHouseMovingIn
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 5, LittlerootTown_MaysHouse_1F_EventScript_GoUpstairsToSetClock
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 6, LittlerootTown_MaysHouse_1F_EventScript_PetalburgGymReport
@@ -403,3 +404,18 @@ RivalsHouse_1F_Text_DoYouHavePokemon:
 	.string "Hi, neighbor!\p"
 	.string "Do you already have your\n"
 	.string "own POKéMON?$"
+
+LittlerootTown_MaysHouse_1F_EventScript_MaybeGuildHall::
+	checkplayergender
+	goto_if_eq VAR_RESULT, FEMALE, LittlerootTown_MaysHouse_1F_EventScript_NotHall
+	lockall
+	fadescreen FADE_TO_BLACK
+	setdynamicwarp MAP_LITTLEROOT_TOWN, 255, 14, 9
+	warpsilent MAP_LITTLEROOT_TOWN_GUILD_HALL, 5, 9
+	waitstate
+	releaseall
+	end
+
+LittlerootTown_MaysHouse_1F_EventScript_NotHall::
+	setvar VAR_TEMP_2, 1
+	end

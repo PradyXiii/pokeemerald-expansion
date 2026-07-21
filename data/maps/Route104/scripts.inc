@@ -15,6 +15,7 @@ Route104_EventScript_StartSailToDewford::
 Route104_OnTransition:
 	call Common_EventScript_SetupRivalGfxId
 	call Route104_EventScript_TrySetRivalPos
+	call_if_eq VAR_ROUTE104_STATE, 1, HunterRoute104_EventScript_SkipRivalScene
 	call Route104_EventScript_ShowOrHideWhiteHerbFlorist
 	end
 
@@ -1166,3 +1167,8 @@ Route104_Text_BrendanPostBattle:
 	.string "making POKéMON battle.\p"
 	.string "Like MR. BRINEY, it's important to\n"
 	.string "become friends with your POKéMON.$"
+
+HunterRoute104_EventScript_SkipRivalScene::
+	setvar VAR_ROUTE104_STATE, 2
+	setflag FLAG_HIDE_ROUTE_104_RIVAL
+	return

@@ -40,7 +40,13 @@ u32 GetCurrentLevelCap(void)
 
 u32 GetSoftLevelCapExpValue(u32 level, u32 expValue)
 {
-    static const u32 sExpScalingDown[5] = { 4, 8, 16, 32, 64 };
+    // Hunter: over-cap taper by difficulty (VAR_UNUSED_0x40B8: 0=MED 1=EASY 2=HARD)
+    static const u32 sExpScalingDownByDifficulty[3][5] = {
+        { 2, 3, 4, 6, 8 },      // medium
+        { 1, 2, 2, 3, 4 },      // easy
+        { 4, 6, 8, 12, 16 },    // hard
+    };
+    const u32 *sExpScalingDown = sExpScalingDownByDifficulty[VarGet(VAR_UNUSED_0x40B8) % 3];
     static const u32 sExpScalingUp[5]   = { 16, 8, 4, 2, 1 };
 
     u32 levelDifference;
@@ -70,11 +76,13 @@ u32 GetSoftLevelCapExpValue(u32 level, u32 expValue)
     }
     else if (B_EXP_CAP_TYPE == EXP_CAP_SOFT)
     {
+        u32 scaled;
         levelDifference = level - currentLevelCap;
-        if (levelDifference > ARRAY_COUNT(sExpScalingDown) - 1)
-            return expValue / sExpScalingDown[ARRAY_COUNT(sExpScalingDown) - 1];
+        if (levelDifference > 4)
+            scaled = expValue / sExpScalingDown[4];
         else
-            return expValue / sExpScalingDown[levelDifference];
+            scaled = expValue / sExpScalingDown[levelDifference];
+        return scaled != 0 ? scaled : 1; // Hunter: always show a visible gain
     }
     else
     {

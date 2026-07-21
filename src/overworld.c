@@ -1097,10 +1097,7 @@ static u16 GetCenterScreenMetatileBehavior(void)
 
 bool32 Overworld_IsBikingAllowed(void)
 {
-    if (!gMapHeader.allowCycling)
-        return FALSE;
-    else
-        return TRUE;
+    return TRUE; // Hunter: the hover board glides anywhere on land, indoors included
 }
 
 // Flash level of 0 is fully bright
@@ -1675,12 +1672,14 @@ void CB1_Overworld(void)
 
 #define TINT_NIGHT Q_8_8(0.456) | Q_8_8(0.456) << 8 | Q_8_8(0.615) << 16
 
+// Hunter: no day/night tint — the sepia look is applied at palette load and
+// must stay uniform outdoors and indoors, day and night
 const struct BlendSettings gTimeOfDayBlend[] =
 {
-    [TIME_MORNING] = {.coeff = 4,  .blendColor = 0xA8B0E0,   .isTint = TRUE},
-    [TIME_DAY]     = {.coeff = 0,  .blendColor = 0,          .isTint = FALSE},
-    [TIME_EVENING] = {.coeff = 4,  .blendColor = 0xA8B0E0,   .isTint = TRUE},
-    [TIME_NIGHT]   = {.coeff = 10, .blendColor = TINT_NIGHT, .isTint = TRUE},
+    [TIME_MORNING] = {.coeff = 0, .blendColor = 0, .isTint = FALSE},
+    [TIME_DAY]     = {.coeff = 0, .blendColor = 0, .isTint = FALSE},
+    [TIME_EVENING] = {.coeff = 0, .blendColor = 0, .isTint = FALSE},
+    [TIME_NIGHT]   = {.coeff = 0, .blendColor = 0, .isTint = FALSE},
 };
 
 #define DEFAULT_WEIGHT 256
@@ -1836,11 +1835,15 @@ u8 UpdateSpritePaletteWithTime(u8 paletteNum)
     return paletteNum;
 }
 
+void HunterRefreshPlayerPalette(void);
+
 static void OverworldBasic(void)
 {
     ScriptContext_RunScript();
     RunTasks();
     AnimateSprites();
+    if (!gPaletteFade.active)
+        HunterRefreshPlayerPalette(); // Hunter: keep player customization applied
     CameraUpdate();
     UpdateCameraPanning();
     BuildOamBuffer();

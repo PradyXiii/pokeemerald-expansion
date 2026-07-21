@@ -322,7 +322,29 @@ static u32 ChooseWildMonIndex_Fishing(u8 rod)
     return wildMonIndex;
 }
 
+static u8 ChooseWildMonLevelRaw(const struct WildPokemon *wildPokemon, u8 wildMonIndex, enum WildPokemonArea area);
+
+// Hunter: wild levels never exceed the player's strongest party member,
+// so board-glide shortcuts can't dump the player into 10-20 level spikes.
 u8 ChooseWildMonLevel(const struct WildPokemon *wildPokemon, u8 wildMonIndex, enum WildPokemonArea area)
+{
+    u32 i, top = 0, count = CalculatePlayerPartyCount();
+    u8 level = ChooseWildMonLevelRaw(wildPokemon, wildMonIndex, area);
+    for (i = 0; i < count; i++)
+    {
+        u32 lvl;
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_EGG))
+            continue;
+        lvl = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
+        if (lvl > top)
+            top = lvl;
+    }
+    if (top >= 2 && level > top)
+        level = top;
+    return level;
+}
+
+static u8 ChooseWildMonLevelRaw(const struct WildPokemon *wildPokemon, u8 wildMonIndex, enum WildPokemonArea area)
 {
     u8 min;
     u8 max;
@@ -643,6 +665,8 @@ bool8 AreLegendariesInSootopolisPreventingEncounters(void)
 
 bool8 StandardWildEncounter(u16 curMetatileBehavior, u16 prevMetatileBehavior)
 {
+    if (CalculatePlayerPartyCount() == 0)
+        return FALSE; // Hunter: no wild battles before adopting a dragon
     u32 headerId;
     enum TimeOfDay timeOfDay;
     struct Roamer *roamer;

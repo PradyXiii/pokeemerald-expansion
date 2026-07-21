@@ -1,5 +1,8 @@
 #include "global.h"
+#include "constants/heal_locations.h"
 #include "clock.h"
+#include "starter_choose.h"
+extern bool8 gChoseOtherGender;
 #include "new_game.h"
 #include "random.h"
 #include "pokemon.h"
@@ -102,7 +105,7 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsTextSpeed = OPTIONS_TEXT_SPEED_MID;
     gSaveBlock2Ptr->optionsWindowFrameType = 0;
     gSaveBlock2Ptr->optionsSound = OPTIONS_SOUND_MONO;
-    gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SHIFT;
+    gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SET; // Hunter: League exam rules
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
     gSaveBlock2Ptr->regionMapZoom = FALSE;
 }
@@ -137,8 +140,10 @@ static void WarpToTruck(void)
 {
     if (IS_FRLG)
         SetWarpDestination(MAP_GROUP(MAP_PALLET_TOWN_PLAYERS_HOUSE_2F), MAP_NUM(MAP_PALLET_TOWN_PLAYERS_HOUSE_2F), WARP_ID_NONE, 6, 6);
+    else if (gSaveBlock2Ptr->playerGender == FEMALE)
+        SetWarpDestination(MAP_GROUP(MAP_LITTLEROOT_TOWN_MAYS_HOUSE_2F), MAP_NUM(MAP_LITTLEROOT_TOWN_MAYS_HOUSE_2F), WARP_ID_NONE, 5, 5);
     else
-        SetWarpDestination(MAP_GROUP(MAP_INSIDE_OF_TRUCK), MAP_NUM(MAP_INSIDE_OF_TRUCK), WARP_ID_NONE, -1, -1);
+        SetWarpDestination(MAP_GROUP(MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F), MAP_NUM(MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F), WARP_ID_NONE, 5, 5);
     WarpIntoMap();
 }
 
@@ -188,7 +193,7 @@ void NewGameInitData(void)
     ResetGabbyAndTy();
     ClearSecretBases();
     ClearBerryTrees();
-    SetMoney(&gSaveBlock1Ptr->money, 3000);
+    SetMoney(&gSaveBlock1Ptr->money, 50000); // Hunter: mother's stipend
     SetCoins(0);
     ResetLinkContestBoolean();
     ResetGameStats();
@@ -203,6 +208,66 @@ void NewGameInitData(void)
     gSaveBlock1Ptr->registeredItem = ITEM_NONE;
     ClearBag();
     NewGameInitPCItems();
+    // Hunter: starting kit — toggleable Exp. Share, Mom's hover board, field supplies
+    if (gChoseOtherGender)
+        FlagSet(FLAG_UNUSED_0x266);
+    VarSet(VAR_UNUSED_0x4091, gSaveBlock2Ptr->playerTrainerId[0] % 6); // issued uniform color
+    AddBagItem(ITEM_POKE_BALL, 10);
+    GetStarterPokemon(0); // roll the three bedroom dragons now
+    // Hunter: skip the truck arrival entirely — family settled in already
+    VarSet(VAR_LITTLEROOT_INTRO_STATE, 7);
+    VarSet(VAR_LITTLEROOT_TOWN_STATE, 4);
+    VarSet(VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 2);
+    VarSet(VAR_LITTLEROOT_HOUSES_STATE_MAY, 2);
+    // Movers are long gone from both houses
+    FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_PLAYERS_HOUSE_VIGOROTH_1);
+    FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_PLAYERS_HOUSE_VIGOROTH_2);
+    // Route 101: no Birch rescue in this timeline — clear its actors
+    VarSet(VAR_ROUTE101_STATE, 3);
+    FlagSet(FLAG_HIDE_ROUTE_101_BIRCH_ZIGZAGOON_BATTLE);
+    FlagSet(FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG);
+    FlagSet(FLAG_HIDE_ROUTE_101_ZIGZAGOON);
+    // No vanilla rival anywhere; Kira (guild) replaces that role
+    FlagSet(FLAG_HIDE_ROUTE_103_RIVAL);
+    FlagSet(FLAG_HIDE_ROUTE_110_RIVAL);
+    FlagSet(FLAG_HIDE_ROUTE_110_RIVAL_ON_BIKE);
+    VarSet(VAR_ROUTE110_STATE, 1);
+    FlagSet(FLAG_HIDE_OLDALE_TOWN_RIVAL);
+    FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_RIVAL);
+    FlagSet(FLAG_HIDE_PLAYERS_HOUSE_DAD);
+    // Petalburg: no gym-boy escort, no Wally scenes
+    VarSet(VAR_PETALBURG_CITY_STATE, 7);
+    // One family per house: home keeps Mom; the other house becomes the Guild Office
+    if (gSaveBlock2Ptr->playerGender == MALE)
+    {
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_MOM);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_BRENDAN);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_SIBLING);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_BEDROOM);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_MOM);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_MOM);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_MAY);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_SIBLING);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_BEDROOM);
+        SetLastHealLocationWarp(HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F);
+    }
+    else
+    {
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_MOM);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_MAY);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_SIBLING);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_BEDROOM);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_MOM);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_MOM);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_BRENDAN);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_SIBLING);
+        FlagSet(FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_BEDROOM);
+        SetLastHealLocationWarp(HEAL_LOCATION_LITTLEROOT_TOWN_MAYS_HOUSE_2F);
+    }
+
+    AddBagItem(ITEM_EXP_SHARE, 1);
+    AddBagItem(ITEM_MACH_BIKE, 1);
+    gSaveBlock1Ptr->registeredItem = ITEM_MACH_BIKE;
     ClearPokeblocks();
     ClearDecorationInventories();
     InitEasyChatPhrases();

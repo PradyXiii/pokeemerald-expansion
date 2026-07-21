@@ -351,3 +351,42 @@ Route103_Text_RouteSign:
 	.string "ROUTE 103\n"
 	.string "{DOWN_ARROW} OLDALE TOWN$"
 
+
+@ Hunter: KIRA, junior guild officer of Dragonfall Landing, waits at the
+@ Route 103 overlook for the game's first rival battle. The vanilla
+@ May/Brendan encounter machinery above is permanently disabled
+@ (FLAG_HIDE_ROUTE_103_RIVAL is set at new game and never cleared).
+Route103_EventScript_GuildKira::
+	trainerbattle_single TRAINER_GUILD_KIRA, Route103_Text_KiraChallenge, Route103_Text_KiraBeaten, Route103_EventScript_KiraDefeated
+	msgbox Route103_Text_KiraPostWin, MSGBOX_DEFAULT
+	release
+	end
+
+Route103_EventScript_KiraDefeated::
+	msgbox Route103_Text_KiraPostWin, MSGBOX_DEFAULT
+	closemessage
+	playse SE_EXIT
+	fadescreen FADE_TO_BLACK
+	setflag FLAG_UNUSED_0x26D
+	removeobject LOCALID_ROUTE103_GUILD_KIRA
+	fadescreen FADE_FROM_BLACK
+	release
+	end
+
+Route103_Text_KiraChallenge:
+	.string "KIRA: There you are.\p"
+	.string "Guild rules. Full strength,\n"
+	.string "no whining, no quitting.\p"
+	.string "Show me your fangs, rookie!$"
+
+Route103_Text_KiraBeaten:
+	.string "Tch.\n"
+	.string "Not bad at all.$"
+
+Route103_Text_KiraPostWin:
+	.string "KIRA: You just beat an officer's\n"
+	.string "team. That gets reported.\p"
+	.string "The ladder at GUILDSTONE CITY is\n"
+	.string "where rank really lives.\l"
+	.string "Climb it. I'll be watching.\p"
+	.string "Next time, I won't hold back.$"

@@ -1031,6 +1031,7 @@ static void LoadTilesetPalette(struct Tileset const *tileset, u16 destOffset, u1
                 CpuCopy16(tileset->palettes[numPalsInPrimary], &gPlttBufferUnfaded[destOffset], size);
             else
                 LoadPaletteFast(tileset->palettes[numPalsInPrimary], destOffset, size);
+            ApplyGlobalTintToPaletteEntries(destOffset, size >> 1);
         }
         else
         {

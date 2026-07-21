@@ -293,6 +293,6 @@ Route101_Text_WildPokemonInTallGrass:
 	.string "to go into the tall grass and search.$"
 
 Route101_Text_RouteSign:
-	.string "ROUTE 101\n"
-	.string "{UP_ARROW} OLDALE TOWN$"
-
+	.string "THE SPILL\n"
+	.string "MIGRANT ACTIVITY: HIGH\l"
+	.string "{UP_ARROW} WAYPOINT OLD DALE$"

@@ -4,6 +4,8 @@ LittlerootTown_BrendansHouse_2F_MapScripts::
 	.byte 0
 
 LittlerootTown_BrendansHouse_2F_OnTransition:
+	call HunterBedroom_EventScript_SetDragonGfx
+	call HunterBedroom_EventScript_GateBrendanRoom
 	call_if_lt VAR_LITTLEROOT_RIVAL_STATE, 2, LittlerootTown_BrendansHouse_2F_EventScript_CheckSetReadyToMeetBrendan
 	call_if_ge VAR_LITTLEROOT_RIVAL_STATE, 3, LittlerootTown_BrendansHouse_2F_EventScript_CheckShouldUpdateBrendanPos
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 4, PlayersHouse_2F_EventScript_BlockStairsUntilClockIsSet
@@ -299,3 +301,188 @@ PlayersHouse_2F_Text_ItsAGameCube:
 	.string "It's a Nintendo GameCube.\p"
 	.string "A Game Boy Advance is connected to\n"
 	.string "serve as the Controller.$"
+
+
+@ ===== Hunter: bedroom dragon adoption =====
+HunterBedroom_EventScript_SetDragonGfx::
+	copyvar VAR_OBJ_GFX_ID_D, VAR_UNUSED_0x404E
+	addvar VAR_OBJ_GFX_ID_D, 16384
+	copyvar VAR_OBJ_GFX_ID_E, VAR_UNUSED_0x4083
+	addvar VAR_OBJ_GFX_ID_E, 16384
+	copyvar VAR_OBJ_GFX_ID_F, VAR_UNUSED_0x408B
+	addvar VAR_OBJ_GFX_ID_F, 16384
+	return
+
+@ Dragons live only in the PLAYER's bedroom; the same maps serve the rival.
+HunterBedroom_EventScript_ShowDragons::
+	clearflag FLAG_UNUSED_0x267
+	clearflag FLAG_UNUSED_0x268
+	clearflag FLAG_UNUSED_0x269
+	call_if_eq VAR_UNUSED_0x409D, 1, HunterBedroom_EventScript_HidePicked0
+	call_if_eq VAR_UNUSED_0x409D, 2, HunterBedroom_EventScript_HidePicked1
+	call_if_eq VAR_UNUSED_0x409D, 3, HunterBedroom_EventScript_HidePicked2
+	return
+
+HunterBedroom_EventScript_HidePicked0::
+	setflag FLAG_UNUSED_0x267
+	return
+HunterBedroom_EventScript_HidePicked1::
+	setflag FLAG_UNUSED_0x268
+	return
+HunterBedroom_EventScript_HidePicked2::
+	setflag FLAG_UNUSED_0x269
+	return
+
+HunterBedroom_EventScript_HideDragons::
+	setflag FLAG_UNUSED_0x267
+	setflag FLAG_UNUSED_0x268
+	setflag FLAG_UNUSED_0x269
+	return
+
+HunterBedroom_EventScript_GateBrendanRoom::
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, HunterBedroom_EventScript_ShowDragons
+	goto HunterBedroom_EventScript_HideDragons
+
+HunterBedroom_EventScript_GateMayRoom::
+	checkplayergender
+	goto_if_eq VAR_RESULT, FEMALE, HunterBedroom_EventScript_ShowDragons
+	goto HunterBedroom_EventScript_HideDragons
+
+HunterBedroom_EventScript_Dragon0::
+	lock
+	faceplayer
+	playmoncry VAR_UNUSED_0x404E, CRY_MODE_NORMAL
+	waitmoncry
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterBedroom_EventScript_Freed
+	bufferspeciesname STR_VAR_1, VAR_UNUSED_0x404E
+	msgbox HunterBedroom_Text_Adopt, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, HunterBedroom_EventScript_Declined
+	givemon VAR_UNUSED_0x404E, 5
+	setvar VAR_UNUSED_0x409D, 1
+	setflag FLAG_UNUSED_0x267
+	removeobject 17
+	goto HunterBedroom_EventScript_Chosen
+
+HunterBedroom_EventScript_Dragon1::
+	lock
+	faceplayer
+	playmoncry VAR_UNUSED_0x4083, CRY_MODE_NORMAL
+	waitmoncry
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterBedroom_EventScript_Freed
+	bufferspeciesname STR_VAR_1, VAR_UNUSED_0x4083
+	msgbox HunterBedroom_Text_Adopt, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, HunterBedroom_EventScript_Declined
+	givemon VAR_UNUSED_0x4083, 5
+	setvar VAR_UNUSED_0x409D, 2
+	setflag FLAG_UNUSED_0x268
+	removeobject 18
+	goto HunterBedroom_EventScript_Chosen
+
+HunterBedroom_EventScript_Dragon2::
+	lock
+	faceplayer
+	playmoncry VAR_UNUSED_0x408B, CRY_MODE_NORMAL
+	waitmoncry
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterBedroom_EventScript_Freed
+	bufferspeciesname STR_VAR_1, VAR_UNUSED_0x408B
+	msgbox HunterBedroom_Text_Adopt, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, HunterBedroom_EventScript_Declined
+	givemon VAR_UNUSED_0x408B, 5
+	setvar VAR_UNUSED_0x409D, 3
+	setflag FLAG_UNUSED_0x269
+	removeobject 19
+	goto HunterBedroom_EventScript_Chosen
+
+HunterBedroom_EventScript_Chosen::
+	setflag FLAG_SYS_POKEMON_GET
+	setflag FLAG_RESCUED_BIRCH
+	setflag FLAG_ADVENTURE_STARTED
+	setflag FLAG_SYS_POKEDEX_GET
+	setflag FLAG_RECEIVED_POKEDEX_FROM_BIRCH
+	setflag FLAG_SYS_NATIONAL_DEX
+	special EnableNationalPokedex
+	setvar VAR_BIRCH_LAB_STATE, 5
+	setvar VAR_LITTLEROOT_RIVAL_STATE, 4
+	msgbox HunterBedroom_Text_Chosen, MSGBOX_DEFAULT
+	release
+	end
+
+HunterBedroom_EventScript_Freed::
+	msgbox HunterBedroom_Text_Freed, MSGBOX_DEFAULT
+	release
+	end
+
+HunterBedroom_EventScript_Declined::
+	msgbox HunterBedroom_Text_Declined, MSGBOX_DEFAULT
+	release
+	end
+
+HunterBedroom_Text_Adopt:
+	.string "The dragon {STR_VAR_1} looks up\n"
+	.string "at you expectantly.\p"
+	.string "Adopt {STR_VAR_1} as your partner?$"
+
+HunterBedroom_Text_Chosen:
+	.string "{STR_VAR_1} presses close to you.\p"
+	.string "Your hunter's license is real now.\n"
+	.string "The other two will stay with Mom.$"
+
+HunterBedroom_Text_Freed:
+	.string "The freed dragon trills happily\n"
+	.string "and circles the room.$"
+
+HunterBedroom_Text_Declined:
+	.string "It watches you pace around\n"
+	.string "the room.$"
+
+HunterGate_EventScript_BrendansHouse_0::
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterGate_EventScript_Allow
+	lockall
+	msgbox HunterGate_Text_MomVoice, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_PLAYER, HunterGate_Movement_PushLeft
+	waitmovement 0
+	releaseall
+	end
+HunterGate_EventScript_BrendansHouse_1::
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterGate_EventScript_Allow
+	lockall
+	msgbox HunterGate_Text_MomVoice, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_PLAYER, HunterGate_Movement_PushDown
+	waitmovement 0
+	releaseall
+	end
+HunterGate_EventScript_MaysHouse_0::
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterGate_EventScript_Allow
+	lockall
+	msgbox HunterGate_Text_MomVoice, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_PLAYER, HunterGate_Movement_PushRight
+	waitmovement 0
+	releaseall
+	end
+HunterGate_EventScript_MaysHouse_1::
+	goto_if_set FLAG_SYS_POKEMON_GET, HunterGate_EventScript_Allow
+	lockall
+	msgbox HunterGate_Text_MomVoice, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_PLAYER, HunterGate_Movement_PushDown
+	waitmovement 0
+	releaseall
+	end
+HunterGate_EventScript_Allow::
+	end
+HunterGate_Movement_PushLeft:
+	walk_left
+	step_end
+HunterGate_Movement_PushRight:
+	walk_right
+	step_end
+HunterGate_Movement_PushDown:
+	walk_down
+	step_end
+HunterGate_Text_MomVoice:
+	.string "MOM's voice: Not without a partner,\n"
+	.string "{PLAYER}! Choose one of the dragons!$"

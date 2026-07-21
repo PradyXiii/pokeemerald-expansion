@@ -29,6 +29,164 @@ LittlerootTown_BrendansHouse_1F_OnTransition:
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 6, LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToTV
 	end
 
+@ Dragonfall ladder state (VAR_UNUSED_0x40A1):
+@ 0 = fresh, 1 = scout beaten, 2 = blade beaten (clear), 3 = rewarded
+HunterGuildOffice_EventScript_Officer::
+	lock
+	faceplayer
+	goto_if_eq VAR_UNUSED_0x40A1, 2, HunterGuildOffice_EventScript_OfficerReward
+	goto_if_eq VAR_UNUSED_0x40A1, 3, HunterGuildOffice_EventScript_OfficerDone
+	msgbox HunterGuildOffice_Text_Officer, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_OfficerReward::
+	msgbox HunterGuildOffice_Text_OfficerReward, MSGBOX_DEFAULT
+	giveitem ITEM_GREAT_BALL, 5
+	setvar VAR_UNUSED_0x40A1, 3
+	release
+	end
+
+HunterGuildOffice_EventScript_OfficerDone::
+	msgbox HunterGuildOffice_Text_OfficerDone, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_Scout::
+	lock
+	faceplayer
+	goto_if_eq VAR_UNUSED_0x40A1, 0, HunterGuildOffice_EventScript_ScoutBattle
+	msgbox HunterGuildOffice_Text_ScoutBeaten, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_ScoutBattle::
+	msgbox HunterGuildOffice_Text_ScoutIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_GUILD_DFALL_SCOUT, HunterGuildOffice_Text_ScoutDefeat
+	setvar VAR_UNUSED_0x40A1, 1
+	msgbox HunterGuildOffice_Text_ScoutAfter, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_Blade::
+	lock
+	faceplayer
+	goto_if_eq VAR_UNUSED_0x40A1, 0, HunterGuildOffice_EventScript_BladeWait
+	goto_if_eq VAR_UNUSED_0x40A1, 1, HunterGuildOffice_EventScript_BladeBattle
+	msgbox HunterGuildOffice_Text_BladeBeaten, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_BladeWait::
+	msgbox HunterGuildOffice_Text_BladeWait, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_BladeBattle::
+	msgbox HunterGuildOffice_Text_BladeIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_GUILD_DFALL_BLADE, HunterGuildOffice_Text_BladeDefeat
+	setvar VAR_UNUSED_0x40A1, 2
+	msgbox HunterGuildOffice_Text_BladeAfter, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_Kira::
+	lock
+	faceplayer
+	msgbox HunterGuildOffice_Text_KiraIntro, MSGBOX_DEFAULT
+	closemessage
+	playse SE_EXIT
+	fadescreen FADE_TO_BLACK
+	setflag FLAG_UNUSED_0x26C
+	setflag FLAG_UNUSED_0x26B
+	removeobject LOCALID_GUILD_OFFICE_KIRA
+	fadescreen FADE_FROM_BLACK
+	msgbox HunterGuildOffice_Text_KiraLeft, MSGBOX_DEFAULT
+	release
+	end
+
+HunterGuildOffice_EventScript_NoticeBoard::
+	msgbox HunterGuildOffice_Text_NoticeBoard, MSGBOX_SIGN
+	end
+
+HunterGuildOffice_Text_Officer:
+	.string "Guild desk. License checks,\n"
+	.string "bounty intake, intel.\p"
+	.string "Your license is active, hunter.\p"
+	.string "Two fighters hold this floor.\n"
+	.string "Beat both and I log your first\l"
+	.string "guild rank. Start any time.$"
+
+HunterGuildOffice_Text_OfficerReward:
+	.string "Floor clear. Logged.\p"
+	.string "By charter you hold Rank III,\n"
+	.string "provisional. Your issue:$"
+
+HunterGuildOffice_Text_OfficerDone:
+	.string "Rank III, provisional.\p"
+	.string "The main hall ladder in\n"
+	.string "GUILDSTONE CITY is your next rung.\p"
+	.string "KIRA hunts ROUTE 103 if you\n"
+	.string "want a real fight first.$"
+
+HunterGuildOffice_Text_ScoutIntro:
+	.string "Floor scout. Rank V.\n"
+	.string "Nobody skips the bottom rung.$"
+
+HunterGuildOffice_Text_ScoutDefeat:
+	.string "Logged and beaten…$"
+
+HunterGuildOffice_Text_ScoutAfter:
+	.string "REY is Rank IV. He hits harder\n"
+	.string "than he talks.$"
+
+HunterGuildOffice_Text_ScoutBeaten:
+	.string "You cleared me already.\n"
+	.string "Go up the ladder.$"
+
+HunterGuildOffice_Text_BladeWait:
+	.string "Ladder rules. The scout\n"
+	.string "screens you first.$"
+
+HunterGuildOffice_Text_BladeIntro:
+	.string "Rank IV. Last one between\n"
+	.string "you and a rank.$"
+
+HunterGuildOffice_Text_BladeDefeat:
+	.string "Clean. Rank-worthy.$"
+
+HunterGuildOffice_Text_BladeAfter:
+	.string "Report to the desk.\n"
+	.string "The Guild owes you a rank.$"
+
+HunterGuildOffice_Text_BladeBeaten:
+	.string "Take the GUILDSTONE ladder.\n"
+	.string "I want a rematch someday.$"
+
+HunterGuildOffice_Text_KiraIntro:
+	.string "KIRA: New face. You're the\n"
+	.string "licensee with the dragon, right?\p"
+	.string "I'm KIRA. Junior officer of this\n"
+	.string "branch. Top blade, for now.\p"
+	.string "Words are cheap in this trade.\n"
+	.string "Meet me on ROUTE 103, past\l"
+	.string "OLD DALE. Bring that dragon.\p"
+	.string "I'll show you what guild rank\n"
+	.string "actually means.$"
+
+HunterGuildOffice_Text_KiraLeft:
+	.string "KIRA is gone.\p"
+	.string "The door is still swinging.$"
+
+HunterGuildOffice_Text_NoticeBoard:
+	.string "GUILD NOTICE BOARD\p"
+	.string "BRANCH LADDER: two fighters,\n"
+	.string "open now. Rank III on clear.\p"
+	.string "MAIN HALL: GUILDSTONE CITY.\n"
+	.string "Ranked ladder, real pay.\p"
+	.string "MIGRANT ACTIVITY: HIGH on all\n"
+	.string "routes. Hunt with a partner.$"
+
 LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToStairs::
 	setobjectxyperm LOCALID_PLAYERS_HOUSE_1F_MOM, 8, 4
 	setobjectmovementtype LOCALID_PLAYERS_HOUSE_1F_MOM, MOVEMENT_TYPE_FACE_UP
@@ -47,6 +205,7 @@ LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToDoor::
 @ Many of the below scripts have no gender check because they assume youre in the correct house
 @ The below SS Ticket script uses Mays house state by accident(?), but theyre both set identically after the intro
 LittlerootTown_BrendansHouse_1F_OnFrame:
+	map_script_2 VAR_TEMP_2, 0, LittlerootTown_BrendansHouse_1F_EventScript_MaybeGuildHall
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 3, LittlerootTown_BrendansHouse_1F_EventScript_EnterHouseMovingIn
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 5, LittlerootTown_BrendansHouse_1F_EventScript_GoUpstairsToSetClock
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 6, LittlerootTown_BrendansHouse_1F_EventScript_PetalburgGymReport
@@ -434,3 +593,20 @@ PlayersHouse_1F_Text_WhatColorDidTheySay:
 PlayersHouse_1F_Text_StillUnknownPokemon:
 	.string "MOM: Well, isn't that something!\n"
 	.string "There are still unknown POKéMON.$"
+
+@ Hunter: for a female/OTHER player this building is the GUILD HALL -
+@ entering redirects into the dedicated hall map; exit returns here.
+LittlerootTown_BrendansHouse_1F_EventScript_MaybeGuildHall::
+	checkplayergender
+	goto_if_eq VAR_RESULT, MALE, LittlerootTown_BrendansHouse_1F_EventScript_NotHall
+	lockall
+	fadescreen FADE_TO_BLACK
+	setdynamicwarp MAP_LITTLEROOT_TOWN, 255, 5, 9
+	warpsilent MAP_LITTLEROOT_TOWN_GUILD_HALL, 5, 9
+	waitstate
+	releaseall
+	end
+
+LittlerootTown_BrendansHouse_1F_EventScript_NotHall::
+	setvar VAR_TEMP_2, 1
+	end

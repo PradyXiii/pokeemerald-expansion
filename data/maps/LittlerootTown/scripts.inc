@@ -46,7 +46,16 @@ LittlerootTown_OnTransition:
 	call_if_eq VAR_LITTLEROOT_RIVAL_STATE, 3, LittlerootTown_EventScript_SetRivalLeftForRoute103
 	call_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 1, LittlerootTown_EventScript_HideMapNamePopup
 	call_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 2, LittlerootTown_EventScript_LeftLabAfterDexUpgrade
+	call HunterDragonfall_EventScript_Fixups
 	end
+
+@ Hunter: no truck ever parks here (car canon), and the dock villager
+@ is always out (vanilla only shows him after the truck cutscene).
+HunterDragonfall_EventScript_Fixups::
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_TRUCK
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_TRUCK
+	clearflag FLAG_HIDE_LITTLEROOT_TOWN_FAT_MAN
+	return
 
 LittlerootTown_EventScript_LeftLabAfterDexUpgrade::
 	setvar VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 3
@@ -242,8 +251,16 @@ LittlerootTown_EventScript_SetRivalBirchPosForDexUpgradeFemale::
 	end
 
 LittlerootTown_EventScript_FatMan::
-	msgbox LittlerootTown_Text_CanUsePCToStoreItems, MSGBOX_NPC
+	msgbox LittlerootTown_Text_DockWorkerIntel, MSGBOX_NPC
 	end
+
+LittlerootTown_Text_DockWorkerIntel:
+	.string "Dock worker. Ten years since the\n"
+	.string "sky split over this cove.\p"
+	.string "THE SPILL, up north, is thick\n"
+	.string "with migrants. Guild pay is good.\p"
+	.string "Resupply at WAYPOINT OLD DALE\n"
+	.string "past the valley.$"
 
 LittlerootTown_EventScript_Boy::
 	msgbox LittlerootTown_Text_BirchSpendsDaysInLab, MSGBOX_NPC
@@ -408,7 +425,7 @@ LittlerootTown_EventScript_PlayersHouseSignMale::
 	return
 
 LittlerootTown_EventScript_BirchsHouseSignFemale::
-	msgbox LittlerootTown_Text_ProfBirchsHouse, MSGBOX_DEFAULT
+	msgbox LittlerootTown_Text_GuildOffice, MSGBOX_DEFAULT
 	return
 
 LittlerootTown_EventScript_MaysHouseSign::
@@ -420,8 +437,12 @@ LittlerootTown_EventScript_MaysHouseSign::
 	end
 
 LittlerootTown_EventScript_BirchsHouseSignMale::
-	msgbox LittlerootTown_Text_ProfBirchsHouse, MSGBOX_DEFAULT
+	msgbox LittlerootTown_Text_GuildOffice, MSGBOX_DEFAULT
 	return
+
+LittlerootTown_Text_GuildOffice:
+	.string "HUNTER GUILD\n"
+	.string "DRAGONFALL LANDING BRANCH OFFICE$"
 
 LittlerootTown_EventScript_PlayersHouseSignFemale::
 	msgbox LittlerootTown_Text_PlayersHouse, MSGBOX_DEFAULT
@@ -991,8 +1012,8 @@ LittlerootTown_Text_GoodLuckCatchingPokemon:
 	.string "Good luck!$"
 
 LittlerootTown_Text_TownSign:
-	.string "LITTLEROOT TOWN\n"
-	.string "“A town that can't be shaded any hue.”$"
+	.string "DRAGONFALL LANDING\n"
+	.string "“Where the migration first hit.”$"
 
 LittlerootTown_Text_ProfBirchsLab:
 	.string "PROF. BIRCH'S POKéMON LAB$"
