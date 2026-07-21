@@ -409,6 +409,7 @@ LittlerootTown_MaysHouse_1F_EventScript_MaybeGuildHall::
 	checkplayergender
 	goto_if_eq VAR_RESULT, FEMALE, LittlerootTown_MaysHouse_1F_EventScript_NotHall
 	lockall
+	fadescreen FADE_TO_BLACK
 	setdynamicwarp MAP_LITTLEROOT_TOWN, 255, 14, 9
 	warpsilent MAP_LITTLEROOT_TOWN_GUILD_HALL, 5, 9
 	waitstate
