@@ -413,10 +413,6 @@ enum
     OBJ_EVENT_GFX_PUSHABLE_BOULDER_FRLG,
     OBJ_EVENT_GFX_CUTTABLE_TREE_FRLG,
     OBJ_EVENT_GFX_BREAKABLE_ROCK_FRLG,
-    OBJ_EVENT_GFX_GIANT_GIBLE,
-    OBJ_EVENT_GFX_GIANT_DRATINI,
-    OBJ_EVENT_GFX_GIANT_BAGON,
-    OBJ_EVENT_GFX_GIANT_AXEW,
     NUM_OBJ_EVENT_GFX,
 };
 
@@ -614,10 +610,6 @@ enum
 #define OBJ_EVENT_PAL_TAG_LIGHT_2                 0x8002
 #define OBJ_EVENT_PAL_TAG_EMOTES                  0x8003
 #define OBJ_EVENT_PAL_TAG_NEON_LIGHT              0x8004
-#define OBJ_EVENT_PAL_TAG_GIANT_GIBLE             0x11A0
-#define OBJ_EVENT_PAL_TAG_GIANT_DRATINI           0x11A1
-#define OBJ_EVENT_PAL_TAG_GIANT_BAGON             0x11A2
-#define OBJ_EVENT_PAL_TAG_GIANT_AXEW              0x11A3
 // Not a real OW palette tag; used for the white flash applied to followers
 #define OBJ_EVENT_PAL_TAG_WHITE                   (OBJ_EVENT_PAL_TAG_NONE - 1)
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF

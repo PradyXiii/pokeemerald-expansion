@@ -537,10 +537,6 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_PlayerFrlg,            OBJ_EVENT_PAL_TAG_PLAYER_GREEN},
     {gObjectEventPal_PlayerReflectionFrlg,  OBJ_EVENT_PAL_TAG_PLAYER_GREEN_REFLECTION},
     {gObjectEventPal_NpcBlue,               OBJ_EVENT_PAL_TAG_NPC_BLUE},
-    {gObjectEventPal_GiantGible,            OBJ_EVENT_PAL_TAG_GIANT_GIBLE},
-    {gObjectEventPal_GiantDratini,          OBJ_EVENT_PAL_TAG_GIANT_DRATINI},
-    {gObjectEventPal_GiantBagon,            OBJ_EVENT_PAL_TAG_GIANT_BAGON},
-    {gObjectEventPal_GiantAxew,             OBJ_EVENT_PAL_TAG_GIANT_AXEW},
     {gObjectEventPal_NpcPink,               OBJ_EVENT_PAL_TAG_NPC_PINK},
     {gObjectEventPal_NpcGreen,              OBJ_EVENT_PAL_TAG_NPC_GREEN},
     {gObjectEventPal_NpcWhite,              OBJ_EVENT_PAL_TAG_NPC_WHITE},
@@ -3362,7 +3358,17 @@ static void UNUSED LoadObjectEventPaletteSet(u16 *paletteTags)
 
 // Really just loads the palette and applies weather fade
 // Hunter: 6 issued uniform colors; accent palette entries 12/13 are recolored per preset
+void HunterTintPaletteSlot(u8 paletteNum);
 static void ApplyHunterUniformTint(u16 tag, u8 paletteNum)
+{
+    if (tag != OBJ_EVENT_PAL_TAG_BRENDAN && tag != OBJ_EVENT_PAL_TAG_MAY
+     && tag != OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION && tag != OBJ_EVENT_PAL_TAG_MAY_REFLECTION)
+        return;
+    HunterTintPaletteSlot(paletteNum);
+}
+
+// Hunter: apply uniform/skin/hair customization directly to a palette slot
+void HunterTintPaletteSlot(u8 paletteNum)
 {
     static const u16 sUniformAccents[][2] = {
         {RGB(31, 12, 11), RGB(24,  8,  8)}, // crimson
@@ -3372,13 +3378,7 @@ static void ApplyHunterUniformTint(u16 tag, u8 paletteNum)
         {RGB(11, 11, 12), RGB( 5,  5,  6)}, // onyx
         {RGB(31, 25, 10), RGB(25, 17,  4)}, // gold
     };
-    u32 preset;
-
-    if (tag != OBJ_EVENT_PAL_TAG_BRENDAN && tag != OBJ_EVENT_PAL_TAG_MAY
-     && tag != OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION && tag != OBJ_EVENT_PAL_TAG_MAY_REFLECTION)
-        return;
-
-    preset = VarGet(VAR_UNUSED_0x4091) % ARRAY_COUNT(sUniformAccents);
+    u32 preset = VarGet(VAR_UNUSED_0x4091) % ARRAY_COUNT(sUniformAccents);
     LoadPalette(&sUniformAccents[preset][0], OBJ_PLTT_ID(paletteNum) + 12, sizeof(u16));
     LoadPalette(&sUniformAccents[preset][1], OBJ_PLTT_ID(paletteNum) + 13, sizeof(u16));
 
@@ -3404,15 +3404,13 @@ static void ApplyHunterUniformTint(u16 tag, u8 paletteNum)
     }
 }
 
-// Hunter: re-apply uniform/skin/hair tint immediately after the picker
+// Hunter: re-tint the LIVE player overworld sprite's actual palette slot -
+// the only slot the player is truly rendered from, regardless of tag/timing
 void HunterRefreshPlayerPalette(void)
 {
-    u8 palNum = IndexOfSpritePaletteTag(OBJ_EVENT_PAL_TAG_BRENDAN);
-    if (palNum != 0xFF)
-        ApplyHunterUniformTint(OBJ_EVENT_PAL_TAG_BRENDAN, palNum);
-    palNum = IndexOfSpritePaletteTag(OBJ_EVENT_PAL_TAG_MAY);
-    if (palNum != 0xFF)
-        ApplyHunterUniformTint(OBJ_EVENT_PAL_TAG_MAY, palNum);
+    u8 spriteId = gPlayerAvatar.spriteId;
+    if (spriteId < MAX_SPRITES)
+        HunterTintPaletteSlot(gSprites[spriteId].oam.paletteNum);
 }
 
 static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette)

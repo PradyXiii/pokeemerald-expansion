@@ -1835,11 +1835,15 @@ u8 UpdateSpritePaletteWithTime(u8 paletteNum)
     return paletteNum;
 }
 
+void HunterRefreshPlayerPalette(void);
+
 static void OverworldBasic(void)
 {
     ScriptContext_RunScript();
     RunTasks();
     AnimateSprites();
+    if (!gPaletteFade.active)
+        HunterRefreshPlayerPalette(); // Hunter: keep player customization applied
     CameraUpdate();
     UpdateCameraPanning();
     BuildOamBuffer();

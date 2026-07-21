@@ -107,37 +107,3 @@ Route102_Text_RouteSignOldale:
 Route102_Text_RouteSignPetalburg:
 	.string "ROUTE 102\n"
 	.string "{LEFT_ARROW} PETALBURG CITY$"
-
-@ Hunter: giant Bagon - once-only catch opportunity.
-Route102_EventScript_GiantBagon::
-	lock
-	faceplayer
-	goto_if_set FLAG_UNUSED_0x275, Route102_EventScript_GiantBagonEnd
-	msgbox Route102_Text_GiantBagon, MSGBOX_DEFAULT
-	closemessage
-	waitse
-	playmoncry SPECIES_BAGON, CRY_MODE_ENCOUNTER
-	delay 40
-	waitmoncry
-	setwildbattle SPECIES_BAGON, 10
-	dowildbattle
-	specialvar VAR_RESULT, GetBattleOutcome
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, Route102_EventScript_GiantBagonGone
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, Route102_EventScript_GiantBagonGone
-	release
-	end
-
-Route102_EventScript_GiantBagonGone::
-	setflag FLAG_UNUSED_0x275
-	removeobject LOCALID_ROUTE102_GIANT_BAGON
-	release
-	end
-
-Route102_EventScript_GiantBagonEnd::
-	release
-	end
-
-Route102_Text_GiantBagon:
-	.string "A boulder-sized BAGON stands at\n"
-	.string "the pond's edge, headbutting the\p"
-	.string "air. It dreams of flight.$"

@@ -1172,37 +1172,3 @@ HunterRoute104_EventScript_SkipRivalScene::
 	setvar VAR_ROUTE104_STATE, 2
 	setflag FLAG_HIDE_ROUTE_104_RIVAL
 	return
-
-@ Hunter: giant Axew - once-only catch opportunity.
-Route104_EventScript_GiantAxew::
-	lock
-	faceplayer
-	goto_if_set FLAG_UNUSED_0x276, Route104_EventScript_GiantAxewEnd
-	msgbox Route104_Text_GiantAxew, MSGBOX_DEFAULT
-	closemessage
-	waitse
-	playmoncry SPECIES_AXEW, CRY_MODE_ENCOUNTER
-	delay 40
-	waitmoncry
-	setwildbattle SPECIES_AXEW, 11
-	dowildbattle
-	specialvar VAR_RESULT, GetBattleOutcome
-	goto_if_eq VAR_RESULT, B_OUTCOME_WON, Route104_EventScript_GiantAxewGone
-	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, Route104_EventScript_GiantAxewGone
-	release
-	end
-
-Route104_EventScript_GiantAxewGone::
-	setflag FLAG_UNUSED_0x276
-	removeobject LOCALID_ROUTE104_GIANT_AXEW
-	release
-	end
-
-Route104_EventScript_GiantAxewEnd::
-	release
-	end
-
-Route104_Text_GiantAxew:
-	.string "A giant AXEW gnaws a fallen\n"
-	.string "log by the shore.\p"
-	.string "Its tusks gleam like sickles.$"

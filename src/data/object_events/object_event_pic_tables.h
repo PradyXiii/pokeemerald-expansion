@@ -1004,54 +1004,6 @@ static const struct SpriteFrameImage sPicTable_RayquazaStill[] = {
     obj_frame_tiles(gObjectEventPic_RayquazaStill),
 };
 
-static const struct SpriteFrameImage sPicTable_GiantBagon[] = {
-    obj_frame_tiles(gObjectEventPic_GiantBagon),
-    obj_frame_tiles(gObjectEventPic_GiantBagon),
-    obj_frame_tiles(gObjectEventPic_GiantBagon),
-    obj_frame_tiles(gObjectEventPic_GiantBagon),
-    obj_frame_tiles(gObjectEventPic_GiantBagon),
-    obj_frame_tiles(gObjectEventPic_GiantBagon),
-    obj_frame_tiles(gObjectEventPic_GiantBagon),
-    obj_frame_tiles(gObjectEventPic_GiantBagon),
-    obj_frame_tiles(gObjectEventPic_GiantBagon),
-};
-
-static const struct SpriteFrameImage sPicTable_GiantAxew[] = {
-    obj_frame_tiles(gObjectEventPic_GiantAxew),
-    obj_frame_tiles(gObjectEventPic_GiantAxew),
-    obj_frame_tiles(gObjectEventPic_GiantAxew),
-    obj_frame_tiles(gObjectEventPic_GiantAxew),
-    obj_frame_tiles(gObjectEventPic_GiantAxew),
-    obj_frame_tiles(gObjectEventPic_GiantAxew),
-    obj_frame_tiles(gObjectEventPic_GiantAxew),
-    obj_frame_tiles(gObjectEventPic_GiantAxew),
-    obj_frame_tiles(gObjectEventPic_GiantAxew),
-};
-
-static const struct SpriteFrameImage sPicTable_GiantGible[] = {
-    obj_frame_tiles(gObjectEventPic_GiantGible),
-    obj_frame_tiles(gObjectEventPic_GiantGible),
-    obj_frame_tiles(gObjectEventPic_GiantGible),
-    obj_frame_tiles(gObjectEventPic_GiantGible),
-    obj_frame_tiles(gObjectEventPic_GiantGible),
-    obj_frame_tiles(gObjectEventPic_GiantGible),
-    obj_frame_tiles(gObjectEventPic_GiantGible),
-    obj_frame_tiles(gObjectEventPic_GiantGible),
-    obj_frame_tiles(gObjectEventPic_GiantGible),
-};
-
-static const struct SpriteFrameImage sPicTable_GiantDratini[] = {
-    obj_frame_tiles(gObjectEventPic_GiantDratini),
-    obj_frame_tiles(gObjectEventPic_GiantDratini),
-    obj_frame_tiles(gObjectEventPic_GiantDratini),
-    obj_frame_tiles(gObjectEventPic_GiantDratini),
-    obj_frame_tiles(gObjectEventPic_GiantDratini),
-    obj_frame_tiles(gObjectEventPic_GiantDratini),
-    obj_frame_tiles(gObjectEventPic_GiantDratini),
-    obj_frame_tiles(gObjectEventPic_GiantDratini),
-    obj_frame_tiles(gObjectEventPic_GiantDratini),
-};
-
 static const struct SpriteFrameImage sPicTable_TuberMSwimming[] = {
     overworld_ascending_frames(gObjectEventPic_TuberMSwimming, 2, 2),
 };
